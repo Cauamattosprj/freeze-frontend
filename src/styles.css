@@ -336,6 +336,96 @@ a {
   background: color-mix(in oklab, var(--header-bg) 84%, transparent 16%);
 }
 
+@layer components {
+  .layout-shell {
+    @apply min-h-screen bg-slate-950 text-slate-100 px-6 py-8 sm:px-10;
+  }
+
+  .layout-stack {
+    @apply mx-auto flex max-w-5xl flex-col gap-6;
+  }
+
+  .surface-card {
+    @apply rounded-[32px] border border-slate-800/70 bg-slate-900/65 p-6 shadow-lg shadow-slate-950/15 ring-1 ring-sky-400/10;
+  }
+
+  .surface-card-soft {
+    @apply rounded-[32px] border border-slate-800/80 bg-slate-900/70 p-6;
+  }
+
+  .surface-card-strong {
+    @apply rounded-[32px] border border-slate-800/70 bg-gradient-to-br from-slate-950 via-slate-900 to-sky-950/90 p-6 shadow-[0_35px_80px_-40px_rgba(14,165,233,0.35)] ring-1 ring-sky-400/20;
+  }
+
+  .text-heading-1 {
+    @apply text-4xl font-semibold text-slate-50;
+  }
+
+  .text-heading-2 {
+    @apply text-2xl font-semibold text-slate-50;
+  }
+
+  .text-label {
+    @apply text-sm uppercase tracking-[0.28em] text-sky-200/70;
+  }
+
+  .text-label-sm {
+    @apply text-sm text-sky-200/70;
+  }
+
+  .text-body {
+    @apply text-lg leading-7 text-slate-200;
+  }
+
+  .badge-pill {
+    @apply justify-center inline-flex items-center gap-2 rounded-full bg-sky-500/10 px-4 py-2 text-sm font-bold text-sky-200 ring-1 ring-sky-300/20 min-w-12;
+  }
+
+  .credit-card-row {
+    @apply grid gap-4 sm:grid-cols-2;
+  }
+
+  .limit-card {
+    @apply rounded-[28px] border border-slate-800/70 bg-slate-900/60 p-4 shadow-[0_18px_60px_-40px_rgba(56,189,248,0.45)] ring-1 ring-sky-400/10;
+  }
+
+  .limit-card-brand {
+    @apply inline-flex items-center gap-2 rounded-full bg-slate-800/85 px-3 py-2 text-sm font-semibold text-slate-100;
+  }
+
+  .limit-card-label {
+    @apply mt-3 flex items-center justify-between text-sm text-slate-300;
+  }
+
+  .limit-status {
+    @apply mt-3 flex items-center justify-between text-sm text-slate-300;
+  }
+
+  .limit-bar {
+    @apply mt-3 h-3 w-full overflow-hidden rounded-full bg-slate-800/80;
+  }
+
+  .limit-bar-fill {
+    @apply h-full rounded-full bg-sky-400/80 transition-all duration-300 ease-out;
+  }
+
+  .panel-grid {
+    @apply grid gap-6 lg:grid-cols-2;
+  }
+
+  .panel-row-between {
+    @apply flex items-center justify-between gap-4;
+  }
+
+  .icon-badge {
+    @apply inline-flex h-14 w-14 items-center justify-center rounded-3xl bg-slate-800/80 text-sky-300 shadow-inner shadow-slate-950/20;
+  }
+
+  .hero-value {
+    @apply mt-2 text-4xl font-semibold text-slate-50;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
