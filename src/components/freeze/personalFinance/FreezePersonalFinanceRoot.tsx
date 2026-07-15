@@ -1,5 +1,5 @@
 import FreezePersonalFinanceBalance from './FreezePersonalFinanceBalance'
-import FreezePersonalFinanceBalanceTabs from './FreezePersonalFinanceTabs'
+import FreezePersonalFinanceTabs from './FreezePersonalFinanceTabs'
 
 export function FreezePersonalFinanceRoot() {
 
@@ -8,7 +8,7 @@ export function FreezePersonalFinanceRoot() {
     <section className="surface-card surface-card-strong min-h-150">
       <div className="flex flex-col gap-6">
         <FreezePersonalFinanceBalance />
-        <FreezePersonalFinanceBalanceTabs />        
+        <FreezePersonalFinanceTabs />        
       </div>
     </section>
   )

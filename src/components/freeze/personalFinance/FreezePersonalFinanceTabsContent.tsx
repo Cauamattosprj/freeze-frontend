@@ -1,43 +1,57 @@
+import { useState } from 'react'
 import { Button } from '#/components/ui/button'
-import { LucideCreditCard, LucideCheck } from 'lucide-react'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '#/components/ui/dialog'
+import { Input } from '#/components/ui/input'
+import { Label } from '#/components/ui/label'
+import { LucideCheck, Trash2 } from 'lucide-react'
 import { Separator } from '#/components/ui/separator'
 import FreezePersonalFinanceInvestments from './FreezePersonalFinanceInvestments'
+import AddIncomeDialog from './dialogs/AddIncomeDialog'
+import AddExpensesDialog from './dialogs/AddExpensesDialog'
+import EditCardDialog from './dialogs/EditCardDialog'
 
-const cardData = [
+const initialCardData = [
   {
     brand: 'Visa',
     title: 'Cartão principal',
-    limit: 'R$ 10.000',
-    currentUsage: 'R$ 6.500',
-    usagePercent: 65,
+    name: 'Visa Platinum',
+    limit: 10000,
+    currentUsage: 6500,
     invoice: 'R$ 2.150',
-    dueIn: 'Vence em 15 dias',
+    dueDate: '2026-07-15',
   },
   {
     brand: 'Mastercard',
     title: 'Cartão secundário',
-    limit: 'R$ 8.000',
-    currentUsage: 'R$ 2.900',
-    usagePercent: 36,
+    name: 'Mastercard Gold',
+    limit: 8000,
+    currentUsage: 2900,
     invoice: 'R$ 1.850',
-    dueIn: 'Vence em 20 dias',
+    dueDate: '2026-07-20',
   },
 ]
 
-const incomeData = [
+const initialIncomeData = [
   {
     label: 'Renda principal',
-    amount: 'R$ 3.325,00',
+    amount: '3.325,00',
     status: 'A receber (06/07)',
   },
   {
     label: 'Horas extras',
-    amount: 'R$ 768,00',
+    amount: '768,00',
     status: 'A receber (06/07)',
   },
 ]
 
-const expenseData = [
+const initialExpenseData = [
   {
     label: 'Cartão Inter',
     amount: 'R$ 1.108,32',
@@ -70,67 +84,233 @@ const expenseData = [
   },
 ]
 
+function formatDateInput(value: string) {
+  if (!value) {
+    return ''
+  }
+
+  const match = value.match(/^(\d{2})\/(\d{2})\/(\d{4})$/)
+
+  if (!match) {
+    return value
+  }
+
+  return `${match[3]}-${match[2]}-${match[1]}`
+}
+
+function formatDateDisplay(value: string) {
+  if (!value) {
+    return ''
+  }
+
+  const match = value.match(/^(\d{4})-(\d{2})-(\d{2})$/)
+
+  if (!match) {
+    return value
+  }
+
+  return `${match[3]}/${match[2]}/${match[1]}`
+}
+
 export default function FreezePersonalFinanceTabsContent({
   view,
 }: {
   view: 'income' | 'expenses' | 'cards' | 'economies'
 }) {
+  const [incomeData, setIncomeData] = useState(initialIncomeData)
+  const [expenseData, setExpenseData] = useState(initialExpenseData)
+  const [cards, setCards] = useState(initialCardData)
+  const [editingIncomeIndex, setEditingIncomeIndex] = useState<number | null>(
+    null,
+  )
+  const [incomeDraft, setIncomeDraft] = useState({
+    label: '',
+    amount: '',
+    status: '',
+  })
+  const [editingExpenseIndex, setEditingExpenseIndex] = useState<number | null>(
+    null,
+  )
+  const [expenseDraft, setExpenseDraft] = useState({
+    label: '',
+    amount: '',
+    status: '',
+    due: '',
+  })
+
+  function closeIncomeEditor() {
+    setEditingIncomeIndex(null)
+    setIncomeDraft({ label: '', amount: '', status: '' })
+  }
+
+  function openIncomeEditor(
+    index: number,
+    income: (typeof initialIncomeData)[number],
+  ) {
+    setEditingIncomeIndex(index)
+    setIncomeDraft({
+      label: income.label,
+      amount: income.amount,
+      status: income.status,
+    })
+  }
+
+  function saveIncome() {
+    if (editingIncomeIndex === null) {
+      return
+    }
+
+    const label = incomeDraft.label.trim()
+    const amount = incomeDraft.amount.trim()
+    const status = incomeDraft.status.trim()
+
+    if (!label || !amount) {
+      return
+    }
+
+    setIncomeData((current) =>
+      current.map((item, index) =>
+        index === editingIncomeIndex
+          ? { ...item, label, amount, status }
+          : item,
+      ),
+    )
+
+    closeIncomeEditor()
+  }
+
+  function deleteIncome() {
+    if (editingIncomeIndex === null) {
+      return
+    }
+
+    setIncomeData((current) =>
+      current.filter((_, index) => index !== editingIncomeIndex),
+    )
+
+    closeIncomeEditor()
+  }
+
+  function closeExpenseEditor() {
+    setEditingExpenseIndex(null)
+    setExpenseDraft({ label: '', amount: '', status: '', due: '' })
+  }
+
+  function openExpenseEditor(
+    index: number,
+    expense: (typeof initialExpenseData)[number],
+  ) {
+    setEditingExpenseIndex(index)
+    setExpenseDraft({
+      label: expense.label,
+      amount: expense.amount,
+      status: expense.status,
+      due: formatDateInput(expense.due),
+    })
+  }
+
+  function saveExpense() {
+    if (editingExpenseIndex === null) {
+      return
+    }
+
+    const label = expenseDraft.label.trim()
+    const amount = expenseDraft.amount.trim()
+    const status = expenseDraft.status.trim()
+    const due = formatDateDisplay(expenseDraft.due)
+
+    if (!label || !amount) {
+      return
+    }
+
+    setExpenseData((current) =>
+      current.map((item, index) =>
+        index === editingExpenseIndex
+          ? { ...item, label, amount, status, due }
+          : item,
+      ),
+    )
+
+    closeExpenseEditor()
+  }
+
+  function deleteExpense() {
+    if (editingExpenseIndex === null) {
+      return
+    }
+
+    setExpenseData((current) =>
+      current.filter((_, index) => index !== editingExpenseIndex),
+    )
+
+    closeExpenseEditor()
+  }
+
   return (
     <div>
       {view === 'cards' && (
         <div className="credit-card-row">
-          {cardData.map((card) => (
-            <div className="limit-card" key={card.title}>
-              <div className="limit-card-brand">
-                <LucideCreditCard className="h-4 w-4" />
-                {card.brand}
-              </div>
-              <div className="limit-card-label">
-                <span>{card.title}</span>
-                <span className="font-semibold text-slate-100">
-                  Limite {card.limit}
-                </span>
-              </div>
-              <div className="limit-status">
-                <span>Uso atual {card.currentUsage}</span>
-                <span className="font-semibold text-slate-100">
-                  {card.usagePercent}%
-                </span>
-              </div>
-              <div className="limit-bar">
-                <div
-                  className="limit-bar-fill"
-                  style={{ width: `${card.usagePercent}%` }}
-                />
-              </div>
-              <div className="mt-3 flex items-center justify-between text-xs text-slate-400">
-                <span>Fatura: {card.invoice}</span>
-                <span>{card.dueIn}</span>
-              </div>
-            </div>
+          {cards.map((card) => (
+            <EditCardDialog
+              key={card.title}
+              card={card}
+              onSave={(updatedCard) =>
+                setCards((current) =>
+                  current.map((item) =>
+                    item.title === card.title ? updatedCard : item,
+                  ),
+                )
+              }
+            />
           ))}
+
+          <EditCardDialog
+            card={{
+              brand: 'Novo cartão',
+              title: 'Novo cartão',
+              name: '',
+              limit: 0,
+              currentUsage: 0,
+              dueDate: '',
+            }}
+            onSave={(newCard) => {
+              setCards((current) => [...current, newCard])
+            }}
+            createMode
+          />
         </div>
       )}
 
       {view === 'income' && (
         <div className="flex flex-col gap-4">
-          {incomeData.map((income) => (
-            <div className="flex flex-col gap-3" key={income.label}>
+          {incomeData.map((income, index) => (
+            <div
+              className="flex flex-col gap-3"
+              key={`${income.label}-${index}`}
+            >
               <div className="flex items-center gap-4">
-                <div className="w-full">
+                <button
+                  type="button"
+                  className="flex-1 rounded-lg text-left"
+                  onClick={() => openIncomeEditor(index, income)}
+                >
                   <div className="flex items-center justify-between">
                     <p className="text-lg text-slate-400">{income.label}:</p>
                     <p className="font-semibold text-lg text-slate-100">
-                      {income.amount}
+                      R$ {income.amount}
                     </p>
                   </div>
                   <div className="flex items-center justify-between">
                     <p className="text-sm text-slate-400">Status:</p>
                     <p className="text-sm text-slate-400">{income.status}</p>
                   </div>
-                </div>
+                </button>
                 <div className="w-fit">
-                  <Button className="bg-transparent border border-slate-600">
+                  <Button
+                    type="button"
+                    className="bg-transparent border border-slate-600"
+                    onClick={() => openIncomeEditor(index, income)}
+                  >
                     <LucideCheck />
                   </Button>
                 </div>
@@ -139,21 +319,111 @@ export default function FreezePersonalFinanceTabsContent({
             </div>
           ))}
 
-          <Button className="bg-transparent border border-slate-600">
-            Adicionar renda
-          </Button>
+          <Dialog
+            open={editingIncomeIndex !== null}
+            onOpenChange={(open) => {
+              if (!open) {
+                closeIncomeEditor()
+              }
+            }}
+          >
+            <DialogContent className="max-w-md bg-slate-900 text-background border border-slate-600">
+              <DialogHeader>
+                <DialogTitle>Editar receita</DialogTitle>
+                <DialogDescription>
+                  Ajuste os dados da receita e salve ou remova o item.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="income-edit-label">Descrição</Label>
+                  <Input
+                    id="income-edit-label"
+                    className="border-slate-600"
+                    value={incomeDraft.label}
+                    onChange={(event) =>
+                      setIncomeDraft((current) => ({
+                        ...current,
+                        label: event.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="income-edit-amount">Valor</Label>
+                  <Input
+                    id="income-edit-amount"
+                    className="border-slate-600"
+                    value={incomeDraft.amount}
+                    onChange={(event) =>
+                      setIncomeDraft((current) => ({
+                        ...current,
+                        amount: event.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="income-edit-status">Status</Label>
+                  <Input
+                    id="income-edit-status"
+                    className="border-slate-600"
+                    value={incomeDraft.status}
+                    onChange={(event) =>
+                      setIncomeDraft((current) => ({
+                        ...current,
+                        status: event.target.value,
+                      }))
+                    }
+                  />
+                </div>
+              </div>
+              <DialogFooter className="sm:justify-between">
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={deleteIncome}
+                >
+                  <Trash2 className="size-4" />
+                  Excluir
+                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={closeIncomeEditor}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button type="button" onClick={saveIncome}>
+                    Salvar
+                  </Button>
+                </div>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
+          <AddIncomeDialog
+            onAddIncome={(income) =>
+              setIncomeData((current) => [...current, income])
+            }
+          />
         </div>
       )}
 
       {view === 'expenses' && (
         <div className="flex flex-col gap-4">
           {expenseData.map((expense, index) => (
-            <div className="flex flex-col gap-3" key={expense.label}>
-              <div
-                className="flex items-center gap-4"
-                key={`${expense.label}-${index}`}
-              >
-                <div className="w-full">
+            <div
+              className="flex flex-col gap-3"
+              key={`${expense.label}-${index}`}
+            >
+              <div className="flex items-center gap-4">
+                <button
+                  type="button"
+                  className="flex-1 rounded-lg text-left"
+                  onClick={() => openExpenseEditor(index, expense)}
+                >
                   <div className="flex items-center justify-between">
                     <p className="text-lg text-slate-400">{expense.label}</p>
                     <p className="font-semibold text-lg text-slate-100">
@@ -168,9 +438,13 @@ export default function FreezePersonalFinanceTabsContent({
                     <p className="text-sm text-slate-400">Vencimento:</p>
                     <p className="text-sm text-slate-400">{expense.due}</p>
                   </div>
-                </div>
+                </button>
                 <div className="w-fit">
-                  <Button className="bg-transparent border border-slate-600">
+                  <Button
+                    type="button"
+                    className="bg-transparent border border-slate-600"
+                    onClick={() => openExpenseEditor(index, expense)}
+                  >
                     <LucideCheck />
                   </Button>
                 </div>
@@ -179,9 +453,110 @@ export default function FreezePersonalFinanceTabsContent({
             </div>
           ))}
 
-          <Button className="bg-transparent border border-slate-600">
-            Adicionar despesa
-          </Button>
+          <Dialog
+            open={editingExpenseIndex !== null}
+            onOpenChange={(open) => {
+              if (!open) {
+                closeExpenseEditor()
+              }
+            }}
+          >
+            <DialogContent className="max-w-md bg-slate-900 text-background border border-slate-600">
+              <DialogHeader>
+                <DialogTitle>Editar despesa</DialogTitle>
+                <DialogDescription>
+                  Ajuste os dados da despesa e salve ou remova o item.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="expense-edit-label">Descrição</Label>
+                  <Input
+                    id="expense-edit-label"
+                    className="border-slate-600"
+                    value={expenseDraft.label}
+                    onChange={(event) =>
+                      setExpenseDraft((current) => ({
+                        ...current,
+                        label: event.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="expense-edit-amount">Valor</Label>
+                  <Input
+                    id="expense-edit-amount"
+                    className="border-slate-600"
+                    value={expenseDraft.amount}
+                    onChange={(event) =>
+                      setExpenseDraft((current) => ({
+                        ...current,
+                        amount: event.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="expense-edit-status">Status</Label>
+                  <Input
+                    id="expense-edit-status"
+                    className="border-slate-600"
+                    value={expenseDraft.status}
+                    onChange={(event) =>
+                      setExpenseDraft((current) => ({
+                        ...current,
+                        status: event.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="expense-edit-due">Vencimento</Label>
+                  <Input
+                    id="expense-edit-due"
+                    type="date"
+                    className="border-slate-600"
+                    value={expenseDraft.due}
+                    onChange={(event) =>
+                      setExpenseDraft((current) => ({
+                        ...current,
+                        due: event.target.value,
+                      }))
+                    }
+                  />
+                </div>
+              </div>
+              <DialogFooter className="sm:justify-between">
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={deleteExpense}
+                >
+                  <Trash2 className="size-4" />
+                  Excluir
+                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={closeExpenseEditor}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button type="button" onClick={saveExpense}>
+                    Salvar
+                  </Button>
+                </div>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
+          <AddExpensesDialog
+            onAddExpense={(expense) =>
+              setExpenseData((current) => [...current, expense])
+            }
+          />
         </div>
       )}
 

@@ -342,7 +342,7 @@ a {
   }
 
   .layout-stack {
-    @apply mx-auto flex max-w-5xl flex-col gap-6;
+    @apply mx-auto flex max-w-xl flex-col gap-6;
   }
 
   .surface-card {
@@ -382,7 +382,7 @@ a {
   }
 
   .credit-card-row {
-    @apply grid gap-4 sm:grid-cols-2;
+    @apply grid gap-4;
   }
 
   .limit-card {
