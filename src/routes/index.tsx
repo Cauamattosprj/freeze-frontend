@@ -1,4 +1,4 @@
-import { FreezePersonalFinanceRoot } from '#/components/freeze/personalFinance/FreezePersonalFinanceRoot'
+import { FreezePersonalFinanceRoot } from '#/components/freeze/personal-finance/FreezePersonalFinanceRoot'
 import { Button } from '#/components/ui/button'
 import { Separator } from '#/components/ui/separator'
 import { createFileRoute } from '@tanstack/react-router'

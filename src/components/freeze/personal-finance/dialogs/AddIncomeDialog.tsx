@@ -1,6 +1,15 @@
 'use client'
 
 import * as React from 'react'
+import { useForm } from 'react-hook-form'
+import {
+  Form,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+  FormField,
+} from '#/components/ui/form'
 import {
   Dialog,
   DialogTrigger,
@@ -24,28 +33,24 @@ interface AddIncomeDialogProps {
 }
 
 export default function AddIncomeDialog({ onAddIncome }: AddIncomeDialogProps) {
-  const [label, setLabel] = React.useState('')
-  const [amount, setAmount] = React.useState('')
-  const [date, setDate] = React.useState('')
+  const form = useForm<{ label: string; amount: string; date: string }>({
+    defaultValues: { label: '', amount: '', date: '' },
+  })
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+  const { handleSubmit, reset } = form
 
-    if (!label.trim() || !amount.trim()) {
-      return
-    }
+  function onSubmit(values: { label: string; amount: string; date: string }) {
+    if (!values.label.trim() || !values.amount.trim()) return
 
-    const status = date ? `A receber (${date})` : 'A receber'
+    const status = values.date ? `A receber (${values.date})` : 'A receber'
 
     onAddIncome({
-      label: label.trim(),
-      amount: amount.trim(),
+      label: values.label.trim(),
+      amount: values.amount.trim(),
       status,
     })
 
-    setLabel('')
-    setAmount('')
-    setDate('')
+    reset()
   }
 
   return (
@@ -62,45 +67,76 @@ export default function AddIncomeDialog({ onAddIncome }: AddIncomeDialogProps) {
             Preencha os dados da nova renda para exibição na aba de receitas.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="income-label">Descrição</Label>
-            <Input
-              id="income-label"
-              placeholder="Renda principal"
-              className="border-slate-600"
-              value={label}
-              onChange={(event) => setLabel(event.target.value)}
+        <Form {...form}>
+          <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+            <FormField
+              name="label"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Descrição</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="income-label"
+                      placeholder="Renda principal"
+                      className="border-slate-600"
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="income-amount">Valor</Label>
-            <Input
-              id="income-amount"
-              placeholder="R$ 0,00"
-              className="border-slate-600"
 
-              value={amount}
-              onChange={(event) => setAmount(event.target.value)}
+            <FormField
+              name="amount"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Valor</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="income-amount"
+                      placeholder="R$ 0,00"
+                      className="border-slate-600"
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="income-date">Data</Label>
-            <Input
-              id="income-date"
-              type="date"
-              className="border-slate-600"
-              value={date}
-              onChange={(event) => setDate(event.target.value)}
+
+            <FormField
+              name="date"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Data</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="income-date"
+                      type="date"
+                      className="border-slate-600"
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant={'secondary'}>Cancelar</Button>
-            </DialogClose>
-            <Button type="submit">Salvar</Button>
-          </DialogFooter>
-        </form>
+
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant={'secondary'}>Cancelar</Button>
+              </DialogClose>
+              <Button type="submit">Salvar</Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   )

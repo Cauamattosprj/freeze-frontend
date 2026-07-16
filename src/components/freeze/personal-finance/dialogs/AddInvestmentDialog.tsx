@@ -1,6 +1,15 @@
 'use client'
 
 import * as React from 'react'
+import { useForm } from 'react-hook-form'
+import {
+  Form,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+  FormField,
+} from '#/components/ui/form'
 import {
   Dialog,
   DialogTrigger,
@@ -26,26 +35,22 @@ interface AddInvestmentDialogProps {
 export default function AddInvestmentDialog({
   onAddInvestment,
 }: AddInvestmentDialogProps) {
-  const [name, setName] = React.useState('')
-  const [amount, setAmount] = React.useState('')
-  const [date, setDate] = React.useState('')
+  const form = useForm<{ name: string; amount: string; date: string }>({
+    defaultValues: { name: '', amount: '', date: '' },
+  })
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+  const { handleSubmit, reset } = form
 
-    if (!name.trim() || !amount.trim()) {
-      return
-    }
+  function onSubmit(values: { name: string; amount: string; date: string }) {
+    if (!values.name.trim() || !values.amount.trim()) return
 
     onAddInvestment({
-      name: name.trim(),
-      amount: amount.trim(),
-      date: date ? date : 'Hoje',
+      name: values.name.trim(),
+      amount: values.amount.trim(),
+      date: values.date ? values.date : 'Hoje',
     })
 
-    setName('')
-    setAmount('')
-    setDate('')
+    reset()
   }
 
   return (
@@ -62,44 +67,76 @@ export default function AddInvestmentDialog({
             Preencha os dados do aporte para exibição na aba de economias.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="investment-name">Nome</Label>
-            <Input
-              id="investment-name"
-              placeholder="Poupança"
-              className="border-slate-600"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
+        <Form {...form}>
+          <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+            <FormField
+              name="name"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nome</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="investment-name"
+                      placeholder="Poupança"
+                      className="border-slate-600"
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="investment-amount">Valor</Label>
-            <Input
-              id="investment-amount"
-              placeholder="R$ 0,00"
-              className="border-slate-600"
-              value={amount}
-              onChange={(event) => setAmount(event.target.value)}
+
+            <FormField
+              name="amount"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Valor</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="investment-amount"
+                      placeholder="R$ 0,00"
+                      className="border-slate-600"
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="investment-date">Data</Label>
-            <Input
-              id="investment-date"
-              type="date"
-              className="border-slate-600"
-              value={date}
-              onChange={(event) => setDate(event.target.value)}
+
+            <FormField
+              name="date"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Data</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="investment-date"
+                      type="date"
+                      className="border-slate-600"
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="secondary">Cancelar</Button>
-            </DialogClose>
-            <Button type="submit">Salvar</Button>
-          </DialogFooter>
-        </form>
+
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="secondary">Cancelar</Button>
+              </DialogClose>
+              <Button type="submit">Salvar</Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   )

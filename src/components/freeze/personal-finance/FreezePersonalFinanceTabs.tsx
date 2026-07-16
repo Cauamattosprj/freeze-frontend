@@ -6,9 +6,8 @@ import {
   LucidePiggyBank,
 } from 'lucide-react'
 import { useState } from 'react'
-import FreezePersonalFinanceTabsContent from '#/components/freeze/personalFinance/FreezePersonalFinanceTabsContent'
-import type { PersonalFinanceTabs } from '#/types/personal-finances';
-
+import FreezePersonalFinanceTabsContent from '#/components/freeze/personal-finance/FreezePersonalFinanceTabsContent'
+import type { PersonalFinanceTabs } from '#/types/personal-finances'
 
 const tabs: Array<{ id: PersonalFinanceTabs; icon: LucideIcon }> = [
   { id: 'cards', icon: LucideCreditCard },

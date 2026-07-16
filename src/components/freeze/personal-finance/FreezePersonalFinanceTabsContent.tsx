@@ -15,7 +15,7 @@ import { Separator } from '#/components/ui/separator'
 import FreezePersonalFinanceInvestments from './FreezePersonalFinanceInvestments'
 import AddIncomeDialog from './dialogs/AddIncomeDialog'
 import AddExpensesDialog from './dialogs/AddExpensesDialog'
-import EditCardDialog from './dialogs/EditCardDialog'
+import CreditCard from './credit-card/CreditCard'
 import type { PersonalFinanceTabs } from '#/types/personal-finances'
 
 const initialCardData = [
@@ -252,7 +252,7 @@ export default function FreezePersonalFinanceTabsContent({
       {view === 'cards' && (
         <div className="credit-card-row">
           {cards.map((card) => (
-            <EditCardDialog
+            <CreditCard
               key={card.title}
               card={card}
               onSave={(updatedCard) =>
@@ -265,7 +265,7 @@ export default function FreezePersonalFinanceTabsContent({
             />
           ))}
 
-          <EditCardDialog
+          <CreditCard
             card={{
               brand: 'Novo cartão',
               title: 'Novo cartão',
