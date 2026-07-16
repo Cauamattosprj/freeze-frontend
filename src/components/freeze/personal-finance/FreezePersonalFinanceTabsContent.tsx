@@ -16,6 +16,7 @@ import FreezePersonalFinanceInvestments from './FreezePersonalFinanceInvestments
 import AddIncomeDialog from './dialogs/AddIncomeDialog'
 import AddExpensesDialog from './dialogs/AddExpensesDialog'
 import EditCardDialog from './dialogs/EditCardDialog'
+import type { PersonalFinanceTabs } from '#/types/personal-finances'
 
 const initialCardData = [
   {
@@ -115,7 +116,7 @@ function formatDateDisplay(value: string) {
 export default function FreezePersonalFinanceTabsContent({
   view,
 }: {
-  view: 'income' | 'expenses' | 'cards' | 'economies'
+  view: PersonalFinanceTabs
 }) {
   const [incomeData, setIncomeData] = useState(initialIncomeData)
   const [expenseData, setExpenseData] = useState(initialExpenseData)
