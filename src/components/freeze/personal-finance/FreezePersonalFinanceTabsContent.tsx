@@ -120,7 +120,7 @@ export default function FreezePersonalFinanceTabsContent({
   view: PersonalFinanceTabs
 }) {
   const allCreditCardsQuery = useGetCreditCardsQuery()
-  
+
   const [incomeData, setIncomeData] = useState(initialIncomeData)
   const [expenseData, setExpenseData] = useState(initialExpenseData)
   const [cards, setCards] = useState(initialCardData)
@@ -254,16 +254,13 @@ export default function FreezePersonalFinanceTabsContent({
     <div>
       {view === 'cards' && (
         <div className="credit-card-row">
+          {!allCreditCardsQuery.data && (
+            <p className="text-slate-400">Nenhum cartão cadastrado.</p>
+          )}
+          
           {allCreditCardsQuery.data?.map((card) => (
-            <CreditCard
-              key={card.id}
-              card={card}
-            />
+            <CreditCard key={card.id} card={card} />
           ))}
-
-          {/* <CreditCard
-            createMode
-          /> */}
         </div>
       )}
 
