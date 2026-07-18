@@ -17,6 +17,7 @@ import AddIncomeDialog from './dialogs/AddIncomeDialog'
 import AddExpensesDialog from './dialogs/AddExpensesDialog'
 import CreditCard from './credit-card/CreditCard'
 import type { PersonalFinanceTabs } from '#/types/personal-finances'
+import { useGetCreditCardsQuery } from '#/hooks/creditCardsHooks'
 
 const initialCardData = [
   {
@@ -118,6 +119,8 @@ export default function FreezePersonalFinanceTabsContent({
 }: {
   view: PersonalFinanceTabs
 }) {
+  const allCreditCardsQuery = useGetCreditCardsQuery()
+  
   const [incomeData, setIncomeData] = useState(initialIncomeData)
   const [expenseData, setExpenseData] = useState(initialExpenseData)
   const [cards, setCards] = useState(initialCardData)
@@ -251,34 +254,16 @@ export default function FreezePersonalFinanceTabsContent({
     <div>
       {view === 'cards' && (
         <div className="credit-card-row">
-          {cards.map((card) => (
+          {allCreditCardsQuery.data?.map((card) => (
             <CreditCard
-              key={card.title}
+              key={card.id}
               card={card}
-              onSave={(updatedCard) =>
-                setCards((current) =>
-                  current.map((item) =>
-                    item.title === card.title ? updatedCard : item,
-                  ),
-                )
-              }
             />
           ))}
 
-          <CreditCard
-            card={{
-              brand: 'Novo cartão',
-              title: 'Novo cartão',
-              name: '',
-              limit: 0,
-              currentUsage: 0,
-              dueDate: '',
-            }}
-            onSave={(newCard) => {
-              setCards((current) => [...current, newCard])
-            }}
+          {/* <CreditCard
             createMode
-          />
+          /> */}
         </div>
       )}
 

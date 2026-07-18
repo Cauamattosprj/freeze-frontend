@@ -24,19 +24,15 @@ import {
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
-
-export interface CardData {
-  brand: string
-  title: string
-  name: string
-  limit: number
-  currentUsage: number
-  dueDate: string
-}
+import {
+  useGetCreditCardQuery,
+  useGetCreditCardsQuery,
+} from '#/hooks/creditCardsHooks'
+import type { CreditCard } from '#/services/freeze/personal-finances/creditCards'
+import { useEffect, useState } from 'react'
 
 interface CreditCardProps {
-  card: CardData
-  onSave: (card: CardData) => void
+  card: CreditCard
   createMode?: boolean
 }
 
@@ -65,119 +61,70 @@ function parseCurrency(value: string) {
   return Number(normalized) || 0
 }
 
-export default function CreditCard({
-  card,
-  createMode = false,
-}: CreditCardProps) {
-  const [open, setOpen] = React.useState(false)
-  const form = useForm<{
-    brand: string
-    title: string
-    name: string
-    limit: string
-    currentUsage: string
-    dueDate: string
-  }>({
-    defaultValues: {
-      brand: createMode ? '' : card.brand,
-      title: createMode ? '' : card.title,
-      name: createMode ? '' : card.name,
-      limit: createMode ? '' : String(card.limit),
-      currentUsage: createMode ? '' : String(card.currentUsage),
-      dueDate: createMode ? '' : card.dueDate,
-    },
-  })
+export default function CreditCard({ card }: CreditCardProps) {
+  const cardExpenses = useGetExpensesByCreditCardQuery(card.id)
+  const [open, setOpen] = useState(false)
+  const form = useForm<CreditCard>()
 
-  const { handleSubmit, reset, watch } = form
+  const { handleSubmit } = form
+  const cardUsage = () => {
+    return (
+      card.limit -
+      cardExpenses.reduce((total, expense) => total + expense.amount, 0)
+    )
+  }
 
-  React.useEffect(() => {
-    if (createMode) {
-      reset({
-        brand: '',
-        title: '',
-        name: '',
-        limit: '',
-        currentUsage: '',
-        dueDate: '',
-      })
-      return
-    }
-    reset({
-      brand: card.brand,
-      title: card.title,
-      name: card.name,
-      limit: String(card.limit),
-      currentUsage: String(card.currentUsage),
-      dueDate: card.dueDate,
-    })
-  }, [card, createMode])
+  const cardUsagePercentage = () => {
+    const limit = card.limit
+    const usage = cardUsage()
+    return Math.round((usage / limit) * 100)
+  }
 
-  const watchedLimit = watch('limit')
-  const watchedUsage = watch('currentUsage')
-  const usagePercent =
-    parseCurrency(String(watchedLimit || card.limit)) > 0
-      ? Math.round(
-          (parseCurrency(String(watchedUsage || card.currentUsage)) /
-            parseCurrency(String(watchedLimit || card.limit))) *
-            100,
-        )
-      : 0
+  // const watchedLimit = watch('limit')
+  // const watchedUsage = watch('currentUsage')
 
-  function onSubmit(values: {
-    brand: string
-    title: string
-    name: string
-    limit: string
-    currentUsage: string
-    dueDate: string
-  }) {
-    const limitValue = parseCurrency(values.limit)
-    const usageValue = parseCurrency(values.currentUsage)
+  // const usagePercent =
+  //   parseCurrency(String(card.limit || card?.limit)) > 0
+  //     ? Math.round(
+  //         (parseCurrency(String(watchedUsage || card.currentUsage)) /
+  //           parseCurrency(String(watchedLimit || card.limit))) *
+  //           100,
+  //       )
+  //     : 0
+
+  function onSubmit(values: CreditCard) {
+    // const limitValue = parseCurrency(values.limit)
+    // const usageValue = parseCurrency(values.currentUsage)
 
     console.log('Submitting card data:', values)
 
     setOpen(false)
   }
 
-  function handleContent() {
-    if (createMode) {
-      return (
-        <button
-          type="button"
-          className="limit-card cursor-pointer border border-slate-700/80 bg-slate-900/70"
-        >
-          <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
-            <div className="flex items-center gap-2 rounded-full border border-slate-600 bg-slate-800/80 px-3 py-1 text-sm text-slate-200">
-              <Plus className="h-4 w-4" />
-              <span>Novo cartão</span>
-            </div>
-            <p className="text-lg font-semibold text-slate-100">Novo cartão</p>
-          </div>
-        </button>
-      )
-    }
-
-    if (!createMode) {
-      return (
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
         <div className="limit-card cursor-pointer">
           <div className="limit-card-brand">
             <LucideCreditCard className="h-4 w-4" />
-            {brand}
+            {card.brand}
           </div>
           <div className="limit-card-label">
-            <span>{title}</span>
-            <span className="font-semibold text-slate-100">{name}</span>
+            <span>{card.label}</span>
+            <span className="font-semibold text-slate-100">
+              {card.holderName}
+            </span>
           </div>
           <div className="limit-status">
-            <span>Uso atual {formatCurrency(card.currentUsage)}</span>
+            <span>Uso atual {cardUsage()}</span>
             <span className="font-semibold text-slate-100">
-              {usagePercent}%
+              {cardUsagePercentage()}%
             </span>
           </div>
           <div className="limit-bar">
             <div
               className="limit-bar-fill"
-              style={{ width: `${usagePercent}%` }}
+              style={{ width: `${cardUsagePercentage}%` }}
             />
           </div>
           <div className="mt-3 flex items-center justify-between text-xs text-slate-400">
@@ -185,23 +132,13 @@ export default function CreditCard({
             <span>{formatDueDateLabel(card.dueDate)}</span>
           </div>
         </div>
-      )
-    }
-  }
-
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{handleContent()}</DialogTrigger>
+      </DialogTrigger>
 
       <DialogContent className="max-w-md bg-slate-900 text-background border border-slate-600">
         <DialogHeader>
-          <DialogTitle>
-            {createMode ? 'Novo cartão' : 'Editar cartão'}
-          </DialogTitle>
+          <DialogTitle>{'Editar cartão'}</DialogTitle>
           <DialogDescription>
-            {createMode
-              ? 'Preencha os dados do novo cartão para adicioná-lo à lista.'
-              : 'Ajuste os detalhes do cartão e o uso atual para atualizar o percentual dinamicamente.'}
+            Ajuste os detalhes do cartão
           </DialogDescription>
         </DialogHeader>
 
@@ -227,7 +164,7 @@ export default function CreditCard({
             />
 
             <FormField
-              name="title"
+              name="label"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
@@ -246,7 +183,7 @@ export default function CreditCard({
             />
 
             <FormField
-              name="name"
+              name="holderName"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
@@ -254,7 +191,7 @@ export default function CreditCard({
                   <FormControl>
                     <Input
                       id="card-name"
-                      placeholder="Visa Platinum"
+                      placeholder="Cartão principal"
                       value={field.value}
                       onChange={field.onChange}
                     />
@@ -276,27 +213,6 @@ export default function CreditCard({
                       type="number"
                       step="0.01"
                       placeholder="10000"
-                      value={field.value}
-                      onChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              name="currentUsage"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Uso atual</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="card-usage"
-                      type="number"
-                      step="0.01"
-                      placeholder="6500"
                       value={field.value}
                       onChange={field.onChange}
                     />

@@ -1,13 +1,14 @@
-export type CreditCard = {
+export type Income = {
   id?: string
   holderName: string
   number: string
-  expiry: string // MM/YY
+  expiry: string
   cvv?: string
-  [key: string]: any
+  limit: number
+  brand: string
 }
 
-const BASE_URL = '/api/credit-cards'
+const BASE_URL = '/api/incomes'
 
 async function baseFetch<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(url, options)
@@ -20,30 +21,30 @@ async function baseFetch<T>(url: string, options?: RequestInit): Promise<T> {
     : (null as unknown as T)
 }
 
-export function getCreditCards(): Promise<CreditCard[]> {
-  return baseFetch<CreditCard[]>(BASE_URL)
+export function getIncomes(): Promise<Income[]> {
+  return baseFetch<Income[]>(BASE_URL)
 }
 
-export function getCreditCard(id: string): Promise<CreditCard> {
-  return baseFetch<CreditCard>(`${BASE_URL}/${id}`)
+export function getIncome(id: string): Promise<Income> {
+  return baseFetch<Income>(`${BASE_URL}/${id}`)
 }
 
-export function createCreditCard(data: CreditCard): Promise<CreditCard> {
-  return baseFetch<CreditCard>(BASE_URL, {
+export function createIncome(data: Income): Promise<Income> {
+  return baseFetch<Income>(BASE_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   })
 }
 
-export function updateCreditCard(id: string, data: Partial<CreditCard>): Promise<CreditCard> {
-  return baseFetch<CreditCard>(`${BASE_URL}/${id}`, {
+export function updateIncome(id: string, data: Partial<Income>): Promise<Income> {
+  return baseFetch<Income>(`${BASE_URL}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   })
 }
 
-export function deleteCreditCard(id: string): Promise<void> {
+export function deleteIncome(id: string): Promise<void> {
   return baseFetch<void>(`${BASE_URL}/${id}`, { method: 'DELETE' })
 }

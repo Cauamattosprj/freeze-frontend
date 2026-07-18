@@ -1,6 +1,7 @@
 import { FreezePersonalFinanceRoot } from '#/components/freeze/personal-finance/FreezePersonalFinanceRoot'
 import { Button } from '#/components/ui/button'
 import { Separator } from '#/components/ui/separator'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import {
   LucideArrowRight,
@@ -13,20 +14,23 @@ import {
 import { useState } from 'react'
 
 export const Route = createFileRoute('/')({ component: Home })
+const queryClient = new QueryClient()
 
 function Home() {
   return (
-    <main className="layout-shell">
-      <div className="layout-stack">
-        <FreezeHeader />
-        <FreezeDashboard />
-        <FreezePersonalFinanceRoot />
-        <div className="panel-grid">
-          <FreezeNotes />
-          <FreezeStudy />
+    <QueryClientProvider client={queryClient}>
+      <main className="layout-shell">
+        <div className="layout-stack">
+          <FreezeHeader />
+          <FreezeDashboard />
+          <FreezePersonalFinanceRoot />
+          <div className="panel-grid">
+            <FreezeNotes />
+            <FreezeStudy />
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </QueryClientProvider>
   )
 }
 
