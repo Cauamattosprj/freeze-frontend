@@ -1,4 +1,4 @@
-export type Income = {
+export type Expense = {
   id?: string
   label: string
   amount: number
@@ -7,7 +7,7 @@ export type Income = {
   category: string
 }
 
-const BASE_URL = '/api/incomes'
+const BASE_URL = '/api/expenses'
 
 async function baseFetch<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(url, options)
@@ -20,30 +20,30 @@ async function baseFetch<T>(url: string, options?: RequestInit): Promise<T> {
     : (null as unknown as T)
 }
 
-export function getIncomes(): Promise<Income[]> {
-  return baseFetch<Income[]>(BASE_URL)
+export function getExpenses(): Promise<Expense[]> {
+  return baseFetch<Expense[]>(BASE_URL)
 }
 
-export function getIncome(id: string): Promise<Income> {
-  return baseFetch<Income>(`${BASE_URL}/${id}`)
+export function getExpense(id: string): Promise<Expense> {
+  return baseFetch<Expense>(`${BASE_URL}/${id}`)
 }
 
-export function createIncome(data: Income): Promise<Income> {
-  return baseFetch<Income>(BASE_URL, {
+export function createExpense(data: Expense): Promise<Expense> {
+  return baseFetch<Expense>(BASE_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   })
 }
 
-export function updateIncome(id: string, data: Partial<Income>): Promise<Income> {
-  return baseFetch<Income>(`${BASE_URL}/${id}`, {
+export function updateExpense(id: string, data: Partial<Expense>): Promise<Expense> {
+  return baseFetch<Expense>(`${BASE_URL}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   })
 }
 
-export function deleteIncome(id: string): Promise<void> {
+export function deleteExpense(id: string): Promise<void> {
   return baseFetch<void>(`${BASE_URL}/${id}`, { method: 'DELETE' })
 }
