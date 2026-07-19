@@ -7,10 +7,10 @@ export default function IncomesList() {
 
   if (!incomes.data)
     return (
-      <>
+      <div>
         <p className="text-slate-400">Nenhum receita cadastrada.</p>
         <AddIncome />
-      </>
+      </div>
     )
 
   return incomes.data?.map((income) => (
