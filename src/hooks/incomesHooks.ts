@@ -25,6 +25,7 @@ export function useCreateIncomeMutation() {
   return useMutation({
     mutationFn: createIncome,
     onSuccess: () => qc.invalidateQueries({ queryKey: incomeListKey }),
+    onError: (error) => console.log("Erro ao tentar realizar a mutation", error)
   })
 }
 

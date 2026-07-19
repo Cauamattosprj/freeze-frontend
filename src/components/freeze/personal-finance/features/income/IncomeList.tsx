@@ -5,7 +5,9 @@ import Income from './Income'
 export default function IncomesList() {
   const incomes = useGetIncomesQuery()
 
-  if (!incomes.data)
+  console.log("incomes.data", incomes.data)
+
+  if (incomes.data?.length == 0)
     return (
       <div>
         <p className="text-slate-400">Nenhum receita cadastrada.</p>

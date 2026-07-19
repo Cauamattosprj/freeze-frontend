@@ -6,7 +6,7 @@ export type Deposit = {
   date: Date
 }
 
-const ENDPOINT = '/deposits'
+const ENDPOINT = 'v1/deposits'
 
 async function baseFetch<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${VITE_API_URL}${url}`, options)

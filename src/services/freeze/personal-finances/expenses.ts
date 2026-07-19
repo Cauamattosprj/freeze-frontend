@@ -9,7 +9,7 @@ export type Expense = {
   category: string
 }
 
-const ENDPOINT = '/expenses'
+const ENDPOINT = 'v1/expenses'
 
 async function baseFetch<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${VITE_API_URL}${url}`, options)

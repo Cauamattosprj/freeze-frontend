@@ -21,14 +21,16 @@ import {
   DialogDescription,
 } from '#/components/ui/dialog'
 import type { Income } from '#/services/freeze/personal-finances/incomes'
+import { useCreateIncomeMutation } from '#/hooks/incomesHooks'
 
 export default function AddIncome() {
   const [open, setOpen] = React.useState(false)
   const form = useForm<Income>()
   const { handleSubmit } = form
+  const incomeMutation = useCreateIncomeMutation()
 
-  function onSubmit(values: Income) {
-    console.log(values)
+  function onSubmit(incomeData: Income) {
+    incomeMutation.mutate(incomeData)
     setOpen(false)
   }
 
@@ -41,7 +43,9 @@ export default function AddIncome() {
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>Adicionar receita</DialogTitle>
-          <DialogDescription>Preencha os detalhes da nova receita</DialogDescription>
+          <DialogDescription>
+            Preencha os detalhes da nova receita
+          </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>

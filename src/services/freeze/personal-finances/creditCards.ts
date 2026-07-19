@@ -12,7 +12,7 @@ export type CreditCard = {
   dueDate: string
 }
 
-const ENDPOINT = '/credit-cards'
+const ENDPOINT = 'v1/credit-cards'
 
 async function baseFetch<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${VITE_API_URL}${url}`, options)
