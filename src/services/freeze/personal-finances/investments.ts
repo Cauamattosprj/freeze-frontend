@@ -1,3 +1,5 @@
+import { VITE_API_URL } from "#/lib/constants";
+
 export type InvestmentCategory =
   | "STOCK"
   | "CDB"
@@ -40,10 +42,10 @@ export type Investment = {
   category: InvestmentCategory
 }
 
-const BASE_URL = '/api/investments'
+const ENDPOINT = '/investments'
 
 async function baseFetch<T>(url: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(url, options)
+  const res = await fetch(`${VITE_API_URL}${url}`, options)
   if (!res.ok) {
     const text = await res.text()
     throw new Error(text || res.statusText)
@@ -54,15 +56,15 @@ async function baseFetch<T>(url: string, options?: RequestInit): Promise<T> {
 }
 
 export function getInvestments(): Promise<Investment[]> {
-  return baseFetch<Investment[]>(BASE_URL)
+  return baseFetch<Investment[]>(ENDPOINT)
 }
 
 export function getInvestment(id: string): Promise<Investment> {
-  return baseFetch<Investment>(`${BASE_URL}/${id}`)
+  return baseFetch<Investment>(`${ENDPOINT}/${id}`)
 }
 
 export function createInvestment(data: Investment): Promise<Investment> {
-  return baseFetch<Investment>(BASE_URL, {
+  return baseFetch<Investment>(ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -70,7 +72,7 @@ export function createInvestment(data: Investment): Promise<Investment> {
 }
 
 export function updateInvestment(id: string, data: Partial<Investment>): Promise<Investment> {
-  return baseFetch<Investment>(`${BASE_URL}/${id}`, {
+  return baseFetch<Investment>(`${ENDPOINT}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -78,5 +80,5 @@ export function updateInvestment(id: string, data: Partial<Investment>): Promise
 }
 
 export function deleteInvestment(id: string): Promise<void> {
-  return baseFetch<void>(`${BASE_URL}/${id}`, { method: 'DELETE' })
+  return baseFetch<void>(`${ENDPOINT}/${id}`, { method: 'DELETE' })
 }

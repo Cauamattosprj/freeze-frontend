@@ -1,3 +1,5 @@
+import { VITE_API_URL } from "#/lib/constants"
+
 export type Expense = {
   id?: string
   label: string
@@ -7,10 +9,10 @@ export type Expense = {
   category: string
 }
 
-const BASE_URL = '/api/expenses'
+const ENDPOINT = '/expenses'
 
 async function baseFetch<T>(url: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(url, options)
+  const res = await fetch(`${VITE_API_URL}${url}`, options)
   if (!res.ok) {
     const text = await res.text()
     throw new Error(text || res.statusText)
@@ -21,15 +23,15 @@ async function baseFetch<T>(url: string, options?: RequestInit): Promise<T> {
 }
 
 export function getExpenses(): Promise<Expense[]> {
-  return baseFetch<Expense[]>(BASE_URL)
+  return baseFetch<Expense[]>(ENDPOINT)
 }
 
 export function getExpense(id: string): Promise<Expense> {
-  return baseFetch<Expense>(`${BASE_URL}/${id}`)
+  return baseFetch<Expense>(`${ENDPOINT}/${id}`)
 }
 
 export function createExpense(data: Expense): Promise<Expense> {
-  return baseFetch<Expense>(BASE_URL, {
+  return baseFetch<Expense>(ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -37,7 +39,7 @@ export function createExpense(data: Expense): Promise<Expense> {
 }
 
 export function updateExpense(id: string, data: Partial<Expense>): Promise<Expense> {
-  return baseFetch<Expense>(`${BASE_URL}/${id}`, {
+  return baseFetch<Expense>(`${ENDPOINT}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -45,5 +47,5 @@ export function updateExpense(id: string, data: Partial<Expense>): Promise<Expen
 }
 
 export function deleteExpense(id: string): Promise<void> {
-  return baseFetch<void>(`${BASE_URL}/${id}`, { method: 'DELETE' })
+  return baseFetch<void>(`${ENDPOINT}/${id}`, { method: 'DELETE' })
 }

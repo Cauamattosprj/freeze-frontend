@@ -1,3 +1,5 @@
+import { VITE_API_URL } from "#/lib/constants"
+
 export type CreditCard = {
   id?: string
   label?: string
@@ -10,10 +12,10 @@ export type CreditCard = {
   dueDate: string
 }
 
-const BASE_URL = '/api/credit-cards'
+const ENDPOINT = '/credit-cards'
 
 async function baseFetch<T>(url: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(url, options)
+  const res = await fetch(`${VITE_API_URL}${url}`, options)
   if (!res.ok) {
     const text = await res.text()
     throw new Error(text || res.statusText)
@@ -24,15 +26,15 @@ async function baseFetch<T>(url: string, options?: RequestInit): Promise<T> {
 }
 
 export function getCreditCards(): Promise<CreditCard[]> {
-  return baseFetch<CreditCard[]>(BASE_URL)
+  return baseFetch<CreditCard[]>(ENDPOINT)
 }
 
 export function getCreditCard(id: string): Promise<CreditCard> {
-  return baseFetch<CreditCard>(`${BASE_URL}/${id}`)
+  return baseFetch<CreditCard>(`${ENDPOINT}/${id}`)
 }
 
 export function createCreditCard(data: CreditCard): Promise<CreditCard> {
-  return baseFetch<CreditCard>(BASE_URL, {
+  return baseFetch<CreditCard>(ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -40,7 +42,7 @@ export function createCreditCard(data: CreditCard): Promise<CreditCard> {
 }
 
 export function updateCreditCard(id: string, data: Partial<CreditCard>): Promise<CreditCard> {
-  return baseFetch<CreditCard>(`${BASE_URL}/${id}`, {
+  return baseFetch<CreditCard>(`${ENDPOINT}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -48,5 +50,5 @@ export function updateCreditCard(id: string, data: Partial<CreditCard>): Promise
 }
 
 export function deleteCreditCard(id: string): Promise<void> {
-  return baseFetch<void>(`${BASE_URL}/${id}`, { method: 'DELETE' })
+  return baseFetch<void>(`${ENDPOINT}/${id}`, { method: 'DELETE' })
 }

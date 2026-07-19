@@ -1,3 +1,5 @@
+import { VITE_API_URL } from "#/lib/constants"
+
 export type Income = {
   id?: string
   label: string
@@ -7,10 +9,10 @@ export type Income = {
   category: string
 }
 
-const BASE_URL = '/api/incomes'
+const ENDPOINT = '/incomes'
 
 async function baseFetch<T>(url: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(url, options)
+  const res = await fetch(`${VITE_API_URL}${url}`, options)
   if (!res.ok) {
     const text = await res.text()
     throw new Error(text || res.statusText)
@@ -21,15 +23,15 @@ async function baseFetch<T>(url: string, options?: RequestInit): Promise<T> {
 }
 
 export function getIncomes(): Promise<Income[]> {
-  return baseFetch<Income[]>(BASE_URL)
+  return baseFetch<Income[]>(ENDPOINT)
 }
 
 export function getIncome(id: string): Promise<Income> {
-  return baseFetch<Income>(`${BASE_URL}/${id}`)
+  return baseFetch<Income>(`${ENDPOINT}/${id}`)
 }
 
 export function createIncome(data: Income): Promise<Income> {
-  return baseFetch<Income>(BASE_URL, {
+  return baseFetch<Income>(ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -37,7 +39,7 @@ export function createIncome(data: Income): Promise<Income> {
 }
 
 export function updateIncome(id: string, data: Partial<Income>): Promise<Income> {
-  return baseFetch<Income>(`${BASE_URL}/${id}`, {
+  return baseFetch<Income>(`${ENDPOINT}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -45,5 +47,5 @@ export function updateIncome(id: string, data: Partial<Income>): Promise<Income>
 }
 
 export function deleteIncome(id: string): Promise<void> {
-  return baseFetch<void>(`${BASE_URL}/${id}`, { method: 'DELETE' })
+  return baseFetch<void>(`${ENDPOINT}/${id}`, { method: 'DELETE' })
 }
