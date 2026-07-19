@@ -13,11 +13,10 @@ import { Label } from '#/components/ui/label'
 import { LucideCheck, Trash2 } from 'lucide-react'
 import { Separator } from '#/components/ui/separator'
 import FreezePersonalFinanceInvestments from './FreezePersonalFinanceInvestments'
-import AddIncomeDialog from './dialogs/AddIncomeDialog'
-import AddExpensesDialog from './dialogs/AddExpensesDialog'
-import CreditCard from './credit-card/CreditCard'
+import CreditCard from './features/credit-card/CreditCard'
 import type { PersonalFinanceTabs } from '#/types/personal-finances'
 import { useGetCreditCardsQuery } from '#/hooks/creditCardsHooks'
+import IncomesList from './features/income/IncomeList'
 
 const initialCardData = [
   {
@@ -257,7 +256,7 @@ export default function FreezePersonalFinanceTabsContent({
           {!allCreditCardsQuery.data && (
             <p className="text-slate-400">Nenhum cartão cadastrado.</p>
           )}
-          
+
           {allCreditCardsQuery.data?.map((card) => (
             <CreditCard key={card.id} card={card} />
           ))}
@@ -266,131 +265,7 @@ export default function FreezePersonalFinanceTabsContent({
 
       {view === 'income' && (
         <div className="flex flex-col gap-4">
-          {incomeData.map((income, index) => (
-            <div
-              className="flex flex-col gap-3"
-              key={`${income.label}-${index}`}
-            >
-              <div className="flex items-center gap-4">
-                <button
-                  type="button"
-                  className="flex-1 rounded-lg text-left"
-                  onClick={() => openIncomeEditor(index, income)}
-                >
-                  <div className="flex items-center justify-between">
-                    <p className="text-lg text-slate-400">{income.label}:</p>
-                    <p className="font-semibold text-lg text-slate-100">
-                      R$ {income.amount}
-                    </p>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm text-slate-400">Status:</p>
-                    <p className="text-sm text-slate-400">{income.status}</p>
-                  </div>
-                </button>
-                <div className="w-fit">
-                  <Button
-                    type="button"
-                    className="bg-transparent border border-slate-600"
-                    onClick={() => openIncomeEditor(index, income)}
-                  >
-                    <LucideCheck />
-                  </Button>
-                </div>
-              </div>
-              <Separator className="bg-slate-600" />
-            </div>
-          ))}
-
-          <Dialog
-            open={editingIncomeIndex !== null}
-            onOpenChange={(open) => {
-              if (!open) {
-                closeIncomeEditor()
-              }
-            }}
-          >
-            <DialogContent className="max-w-md bg-slate-900 text-background border border-slate-600">
-              <DialogHeader>
-                <DialogTitle>Editar receita</DialogTitle>
-                <DialogDescription>
-                  Ajuste os dados da receita e salve ou remova o item.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="income-edit-label">Descrição</Label>
-                  <Input
-                    id="income-edit-label"
-                    className="border-slate-600"
-                    value={incomeDraft.label}
-                    onChange={(event) =>
-                      setIncomeDraft((current) => ({
-                        ...current,
-                        label: event.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="income-edit-amount">Valor</Label>
-                  <Input
-                    id="income-edit-amount"
-                    className="border-slate-600"
-                    value={incomeDraft.amount}
-                    onChange={(event) =>
-                      setIncomeDraft((current) => ({
-                        ...current,
-                        amount: event.target.value,
-                      }))
-                    }
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="income-edit-status">Status</Label>
-                  <Input
-                    id="income-edit-status"
-                    className="border-slate-600"
-                    value={incomeDraft.status}
-                    onChange={(event) =>
-                      setIncomeDraft((current) => ({
-                        ...current,
-                        status: event.target.value,
-                      }))
-                    }
-                  />
-                </div>
-              </div>
-              <DialogFooter className="sm:justify-between">
-                <Button
-                  type="button"
-                  variant="destructive"
-                  onClick={deleteIncome}
-                >
-                  <Trash2 className="size-4" />
-                  Excluir
-                </Button>
-                <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={closeIncomeEditor}
-                  >
-                    Cancelar
-                  </Button>
-                  <Button type="button" onClick={saveIncome}>
-                    Salvar
-                  </Button>
-                </div>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-
-          <AddIncomeDialog
-            onAddIncome={(income) =>
-              setIncomeData((current) => [...current, income])
-            }
-          />
+          <IncomesList />
         </div>
       )}
 
@@ -534,12 +409,6 @@ export default function FreezePersonalFinanceTabsContent({
               </DialogFooter>
             </DialogContent>
           </Dialog>
-
-          <AddExpensesDialog
-            onAddExpense={(expense) =>
-              setExpenseData((current) => [...current, expense])
-            }
-          />
         </div>
       )}
 

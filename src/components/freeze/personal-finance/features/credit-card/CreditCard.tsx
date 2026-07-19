@@ -33,7 +33,6 @@ import { useEffect, useState } from 'react'
 
 interface CreditCardProps {
   card: CreditCard
-  createMode?: boolean
 }
 
 function formatCurrency(value: number) {
@@ -137,9 +136,7 @@ export default function CreditCard({ card }: CreditCardProps) {
       <DialogContent className="max-w-md bg-slate-900 text-background border border-slate-600">
         <DialogHeader>
           <DialogTitle>{'Editar cartão'}</DialogTitle>
-          <DialogDescription>
-            Ajuste os detalhes do cartão
-          </DialogDescription>
+          <DialogDescription>Ajuste os detalhes do cartão</DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
