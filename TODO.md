@@ -1,5 +1,5 @@
-- [ ] Refatorar os componentes das demais funcionalidades igual ao do CreditCard
-- [ ] 
+- [x] Refatorar os componentes das demais funcionalidades igual ao do CreditCard
+- [ ] Endpoint de income na API funcionando
 - [ ] 
 - [ ] 
 - [ ] 

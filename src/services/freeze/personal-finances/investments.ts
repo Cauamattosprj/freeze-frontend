@@ -1,4 +1,5 @@
 import { VITE_API_URL } from "#/lib/constants";
+import type { Deposit } from "./deposit";
 
 export type InvestmentCategory =
   | "STOCK"
@@ -25,11 +26,6 @@ export type RentabilityPeriod =
 | "MONTHLY"
 | "YEARLY"
 
-export type Deposit = {
-  id?: string
-  amount: number
-  date: Date
-}
 
 export type Investment = {
   id?: string
