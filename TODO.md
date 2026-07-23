@@ -1,7 +1,7 @@
 - [x] Refatorar os componentes das demais funcionalidades igual ao do CreditCard
 - [x] Todos os endpoints backend funcionando com CRUD
-- [ ] 
-- [ ] 
+- [ ] Validar o datasource postgres
+- [ ] Garantir que o saldo esteja sendo mostrado e calculado
 - [ ] 
 - [ ] 
 - [ ] 

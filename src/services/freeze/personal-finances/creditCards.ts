@@ -7,7 +7,7 @@ export type CreditCard = {
   number: string
   expiry: string
   cvv?: string
-  limit: number
+  limitAmount: number
   brand: string
   dueDate: string
 }

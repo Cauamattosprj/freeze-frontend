@@ -19,6 +19,7 @@ export default function ExpensesList() {
       {expenses.data?.map((expense) => (
         <Expense key={expense.id} expense={expense} />
       ))}
+      <CreateExpense />
     </div>
   )
 }

@@ -7,6 +7,7 @@ export type Expense = {
   status: string
   dueDate: string
   category: string
+  creditCardId?: string
 }
 
 const ENDPOINT = 'v1/expenses'
@@ -24,6 +25,10 @@ async function baseFetch<T>(url: string, options?: RequestInit): Promise<T> {
 
 export function getExpenses(): Promise<Expense[]> {
   return baseFetch<Expense[]>(ENDPOINT)
+}
+
+export function getExpensesByCreditCard(creditCardId: string): Promise<Expense[]> {
+  return baseFetch<Expense[]>(`${ENDPOINT}?creditCardId${creditCardId}`, { method: 'GET' })
 }
 
 export function getExpense(id: string): Promise<Expense> {

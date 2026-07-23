@@ -44,7 +44,9 @@ export default function CreateExpense() {
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>Adicionar despesa</DialogTitle>
-          <DialogDescription>Preencha os detalhes da nova despesa</DialogDescription>
+          <DialogDescription>
+            Preencha os detalhes da nova despesa
+          </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
@@ -118,6 +120,20 @@ export default function CreateExpense() {
                   <FormLabel>Categoria</FormLabel>
                   <FormControl>
                     <Input placeholder="Categoria" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="creditCardId"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Cartão de crédito</FormLabel>
+                  <FormControl>
+                    <Input placeholder="ID do cartão de crédito" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

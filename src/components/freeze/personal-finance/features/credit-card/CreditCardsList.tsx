@@ -5,7 +5,7 @@ import CreditCard from './CreditCard'
 export default function CreditCardsList() {
   const allCreditCardsQuery = useGetCreditCardsQuery()
 
-  if (!allCreditCardsQuery.data) {
+  if (allCreditCardsQuery.data?.length == 0) {
     return (
       <div>
         <p className="text-slate-400">Nenhum cartão cadastrado</p>
@@ -14,7 +14,13 @@ export default function CreditCardsList() {
     )
   }
 
-  return allCreditCardsQuery.data?.map((creditCard) => (
-    <CreditCard card={creditCard} />
-  ))
+  return (
+    <div>
+      {allCreditCardsQuery.data?.map((creditCard) => (
+        <CreditCard card={creditCard} />
+      ))}
+
+      <CreateCreditCard />
+    </div>
+  )
 }

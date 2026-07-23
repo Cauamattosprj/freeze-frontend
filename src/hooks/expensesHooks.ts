@@ -6,6 +6,7 @@ import {
   updateExpense,
   deleteExpense,
   type Expense,
+  getExpensesByCreditCard,
 } from '#/services/freeze/personal-finances/expenses'
 
 const expenseListKey = ['expenses']
@@ -15,7 +16,11 @@ export function useGetExpensesQuery() {
   return useQuery({ queryKey: expenseListKey, queryFn: getExpenses })
 }
 
-export function useGetExpenseQuery(id?: string) {
+export function useGetExpensesByCreditCardQuery(id: string) {
+  return useQuery({queryKey: expenseKey(id), queryFn: () => getExpensesByCreditCard(id as string)})
+}
+
+export function useGetExpenseQuery(id: string) {
   return useQuery({ queryKey: expenseKey(id), queryFn: () => getExpense(id as string) })
 }
 
