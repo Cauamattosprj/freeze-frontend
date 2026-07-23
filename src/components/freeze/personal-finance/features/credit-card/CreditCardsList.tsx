@@ -1,5 +1,5 @@
 import { useGetCreditCardsQuery } from '#/hooks/creditCardsHooks'
-import AddCreditCard from './AddCreditCard'
+import CreateCreditCard from './CreateCreditCard'
 import CreditCard from './CreditCard'
 
 export default function CreditCardsList() {
@@ -9,7 +9,7 @@ export default function CreditCardsList() {
     return (
       <div>
         <p className="text-slate-400">Nenhum cartão cadastrado</p>
-        <AddCreditCard />
+        <CreateCreditCard />
       </div>
     )
   }

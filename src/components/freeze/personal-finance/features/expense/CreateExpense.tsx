@@ -20,32 +20,31 @@ import {
   DialogTitle,
   DialogDescription,
 } from '#/components/ui/dialog'
-import type { Income } from '#/services/freeze/personal-finances/incomes'
-import { useCreateIncomeMutation } from '#/hooks/incomesHooks'
+import type { Expense } from '#/services/freeze/personal-finances/expenses'
+import { useCreateExpenseMutation } from '#/hooks/expensesHooks'
 
-export default function AddIncome() {
+export default function CreateExpense() {
   const [open, setOpen] = React.useState(false)
-  const form = useForm<Income>()
+  const expenseMutation = useCreateExpenseMutation()
+  const form = useForm<Expense>()
   const { handleSubmit } = form
-  const incomeMutation = useCreateIncomeMutation()
 
-  function onSubmit(incomeData: Income) {
-    incomeMutation.mutate(incomeData)
+  function onSubmit(values: Expense) {
+    console.log(values)
+    expenseMutation.mutate(values)
     setOpen(false)
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <div className="cursor-pointer">Adicionar receita</div>
+        <div className="cursor-pointer">Adicionar despesa</div>
       </DialogTrigger>
 
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Adicionar receita</DialogTitle>
-          <DialogDescription>
-            Preencha os detalhes da nova receita
-          </DialogDescription>
+          <DialogTitle>Adicionar despesa</DialogTitle>
+          <DialogDescription>Preencha os detalhes da nova despesa</DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
@@ -57,7 +56,7 @@ export default function AddIncome() {
                 <FormItem>
                   <FormLabel>Label</FormLabel>
                   <FormControl>
-                    <Input placeholder="Nome da receita" {...field} />
+                    <Input placeholder="Nome da despesa" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -90,7 +89,7 @@ export default function AddIncome() {
                 <FormItem>
                   <FormLabel>Status</FormLabel>
                   <FormControl>
-                    <Input placeholder="pending / received" {...field} />
+                    <Input placeholder="pending / paid" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

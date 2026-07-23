@@ -12,7 +12,7 @@ const incomeListKey = ['incomes']
 const incomeKey = (id: string | undefined) => ['income', id] as const
 
 export function useGetIncomesQuery() {
-  return useQuery({ queryKey: incomeListKey, queryFn: getIncomes })
+  return useQuery({ queryKey: incomeListKey, queryFn: getIncomes, staleTime: 5 * 60 * 1000 })
 }
 
 export function useGetIncomeQuery(id?: string) {

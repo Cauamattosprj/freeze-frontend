@@ -1,5 +1,5 @@
 - [x] Refatorar os componentes das demais funcionalidades igual ao do CreditCard
-- [ ] Endpoint de income na API funcionando
+- [x] Todos os endpoints backend funcionando com CRUD
 - [ ] 
 - [ ] 
 - [ ] 

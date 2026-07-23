@@ -21,14 +21,17 @@ import {
   DialogDescription,
 } from '#/components/ui/dialog'
 import type { CreditCard } from '#/services/freeze/personal-finances/creditCards'
+import { useCreateCreditCardMutation } from '#/hooks/creditCardsHooks'
 
-export default function AddCreditCard() {
+export default function CreateCreditCard() {
   const [open, setOpen] = React.useState(false)
   const form = useForm<CreditCard>()
   const { handleSubmit } = form
+  const creditCardMutation = useCreateCreditCardMutation()
 
   function onSubmit(values: CreditCard) {
     console.log(values)
+    creditCardMutation.mutate(values)
     setOpen(false)
   }
 

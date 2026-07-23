@@ -20,28 +20,33 @@ import {
   DialogTitle,
   DialogDescription,
 } from '#/components/ui/dialog'
-import type { Expense } from '#/services/freeze/personal-finances/expenses'
+import type { Income } from '#/services/freeze/personal-finances/incomes'
+import { useCreateIncomeMutation } from '#/hooks/incomesHooks'
 
-export default function AddExpense() {
+export default function CreateIncome() {
   const [open, setOpen] = React.useState(false)
-  const form = useForm<Expense>()
+  const form = useForm<Income>()
   const { handleSubmit } = form
+  const incomeMutation = useCreateIncomeMutation()
 
-  function onSubmit(values: Expense) {
+  function onSubmit(values: Income) {
     console.log(values)
+    incomeMutation.mutate(values)
     setOpen(false)
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <div className="cursor-pointer">Adicionar despesa</div>
+        <div className="cursor-pointer">Adicionar receita</div>
       </DialogTrigger>
 
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Adicionar despesa</DialogTitle>
-          <DialogDescription>Preencha os detalhes da nova despesa</DialogDescription>
+          <DialogTitle>Adicionar receita</DialogTitle>
+          <DialogDescription>
+            Preencha os detalhes da nova receita
+          </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
@@ -53,7 +58,7 @@ export default function AddExpense() {
                 <FormItem>
                   <FormLabel>Label</FormLabel>
                   <FormControl>
-                    <Input placeholder="Nome da despesa" {...field} />
+                    <Input placeholder="Nome da receita" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -86,7 +91,7 @@ export default function AddExpense() {
                 <FormItem>
                   <FormLabel>Status</FormLabel>
                   <FormControl>
-                    <Input placeholder="pending / paid" {...field} />
+                    <Input placeholder="pending / received" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
