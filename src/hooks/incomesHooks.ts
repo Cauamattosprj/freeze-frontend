@@ -24,7 +24,10 @@ export function useCreateIncomeMutation() {
 
   return useMutation({
     mutationFn: createIncome,
-    onSuccess: () => qc.invalidateQueries({ queryKey: incomeListKey }),
+    onSuccess: async () => {
+      await qc.invalidateQueries({ queryKey: [incomeListKey] })
+      await qc.invalidateQueries({ queryKey: ['balance'] })
+    },
     onError: (error) => console.log("Erro ao tentar realizar a mutation", error)
   })
 }

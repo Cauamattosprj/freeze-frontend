@@ -1,12 +1,26 @@
+import { useGetBalanceQuery } from '#/hooks/balanceHooks'
 import { LucideArrowRight } from 'lucide-react'
+import { useEffect } from 'react'
 
 export default function FreezePersonalFinanceBalance() {
+  const balanceQuery = useGetBalanceQuery()
+
+  console.log(balanceQuery)
+
+  if (!balanceQuery?.data) {
+    return "Erro ao carregar saldo";
+  }
+
+  // if (balanceQuery.isFetching) {
+  //   return "Carregando saldo..."
+  // }
+
   return (
     <div className="flex flex-col gap-2">
       <div className="panel-row-between">
         <div>
           <p className="text-label">Saldo desse mês</p>
-          <p className="hero-value">R$ 4138,12</p>
+          <p className="hero-value">R$ {balanceQuery.data.toString()}</p>
         </div>
         <div className="badge-icon">
           <LucideArrowRight className="h-6 w-6" />

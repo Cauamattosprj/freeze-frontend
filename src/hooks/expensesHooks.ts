@@ -29,7 +29,10 @@ export function useCreateExpenseMutation() {
 
   return useMutation({
     mutationFn: createExpense,
-    onSuccess: () => qc.invalidateQueries({ queryKey: expenseListKey }),
+    onSuccess: async () => {
+      await qc.invalidateQueries({ queryKey: [expenseListKey] })
+      await qc.invalidateQueries({ queryKey: ['balance'] })
+    },
   })
 }
 
