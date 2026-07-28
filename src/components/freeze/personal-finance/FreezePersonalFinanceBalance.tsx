@@ -7,7 +7,7 @@ export default function FreezePersonalFinanceBalance() {
 
   console.log(balanceQuery)
 
-  if (!balanceQuery?.data) {
+  if (balanceQuery?.data == null) {
     return "Erro ao carregar saldo";
   }
 
@@ -29,7 +29,7 @@ export default function FreezePersonalFinanceBalance() {
       <div className='flex gap-4 justify-between'>
         <div>
           <p className="text-label-sm">Saldo livre após despesas fixas e investimentos</p>
-          <p className="text-sm font-semibold text-green-200">R$ 381,00 (13%)</p>
+          <p className="text-sm font-semibold text-green-200">R$ EM BREVE (XX%)</p>
         </div>
       </div>
     </div>

@@ -1,10 +1,11 @@
 import { VITE_API_URL } from "#/lib/constants"
+import type { ExpenseStatusEnum } from "#/utils/personalFinanceEnums"
 
 export type Expense = {
   id?: string
   label: string
   amount: number
-  status: string
+  status: ExpenseStatusEnum
   dueDate: string
   category: string
   creditCardId?: string
@@ -43,11 +44,11 @@ export function createExpense(data: Expense): Promise<Expense> {
   })
 }
 
-export function updateExpense(id: string, data: Partial<Expense>): Promise<Expense> {
-  return baseFetch<Expense>(`${ENDPOINT}/${id}`, {
+export function updateExpense(expense: Partial<Expense>): Promise<Expense> {
+  return baseFetch<Expense>(`${ENDPOINT}/${expense.id as string}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
+    body: JSON.stringify(expense),
   })
 }
 

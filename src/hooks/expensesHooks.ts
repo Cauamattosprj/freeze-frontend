@@ -36,12 +36,16 @@ export function useCreateExpenseMutation() {
   })
 }
 
-export function useUpdateExpenseMutation(id: string, data: Partial<Expense>) {
+export function useUpdateExpenseMutation() {
   const qc = useQueryClient()
 
   return useMutation({
-    mutationFn: () => updateExpense(id, data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: expenseListKey }),
+    mutationFn: (expense: Partial<Expense>) => updateExpense(expense),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: expenseListKey }),
+      qc.invalidateQueries({ queryKey: ['balance'] })
+    },
+    onError: (error) => console.error('Error updating expense:', error),
   })
 }
 

@@ -38,8 +38,8 @@ export function createIncome(data: Income): Promise<Income> {
   })
 }
 
-export function updateIncome(id: string, data: Partial<Income>): Promise<Income> {
-  return baseFetch<Income>(`${ENDPOINT}/${id}`, {
+export function updateIncome(data: Partial<Income>): Promise<Income> {
+  return baseFetch<Income>(`${ENDPOINT}/${data.id as string}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),

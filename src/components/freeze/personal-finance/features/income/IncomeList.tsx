@@ -1,5 +1,6 @@
 import { useGetIncomesQuery } from '#/hooks/incomesHooks'
 import CreateIncome from './CreateIncome'
+import EditIncome from './EditIncome'
 import Income from './Income'
 
 export default function IncomesList() {

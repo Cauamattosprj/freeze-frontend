@@ -32,12 +32,16 @@ export function useCreateIncomeMutation() {
   })
 }
 
-export function useUpdateIncomeMutation(id: string, data: Partial<Income>) {
+export function useUpdateIncomeMutation() {
   const qc = useQueryClient()
 
   return useMutation({
-    mutationFn: () => updateIncome(id, data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: incomeListKey }),
+    mutationFn: (income: Partial<Income>) => updateIncome(income),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: incomeListKey }),
+      qc.invalidateQueries({queryKey: ['balance']})
+    },
+    onError: (error) => console.error('Error updating income:', error),
   })
 }
 
@@ -46,6 +50,9 @@ export function useDeleteIncomeMutation() {
 
   return useMutation({
     mutationFn: deleteIncome,
-    onSuccess: () => qc.invalidateQueries({ queryKey: incomeListKey }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: incomeListKey })
+      qc.invalidateQueries({ queryKey: ['balance'] })
+    },
   })
 }
