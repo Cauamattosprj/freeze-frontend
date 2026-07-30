@@ -1,4 +1,11 @@
+[build]
+  command = "pnpm run build"
+  publish = "dist/client"
+
+[build.environment]
+  NODE_VERSION = "22"
+
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "/.netlify/functions/server"
   status = 200
