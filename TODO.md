@@ -2,7 +2,7 @@
 - [x] Todos os endpoints backend funcionando com CRUD
 - [ ] Validar o datasource postgres
 - [ ] Garantir que o saldo esteja sendo mostrado e calculado
-- [ ] 
+- [ ] Continuar implementando o spring security https://medium.com/@felipeacelinoo/protegendo-sua-api-rest-com-spring-security-e-autenticando-usu%C3%A1rios-com-token-jwt-em-uma-aplica%C3%A7%C3%A3o-d70e5b0331f9
 - [ ] 
 - [ ] 
 - [ ] 
