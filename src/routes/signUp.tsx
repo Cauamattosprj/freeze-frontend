@@ -14,27 +14,23 @@ import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
 import { Separator } from '#/components/ui/separator'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useGetToken, useLoginMutation } from '#/hooks/userHooks'
 
-export const Route = createFileRoute('/login')({
+export const Route = createFileRoute('/signUp')({
   component: RouteComponent,
 })
 
-type LoginForm = {
+type SignUpForm = {
+  name: string
   email: string
   password: string
 }
 
 function RouteComponent() {
-  const form = useForm<LoginForm>()
+  const form = useForm<SignUpForm>()
   const { handleSubmit } = form
-  const loginMutation = useLoginMutation()
-  const token = useGetToken()
 
-  function onSubmit(values: LoginForm) {
+  function onSubmit(values: SignUpForm) {
     console.log(values)
-    loginMutation.mutate(values)
-    console.log("Token do getToken:", token)
   }
 
   return (
@@ -48,17 +44,35 @@ function RouteComponent() {
               </div>
               <span className="sr-only">Freeze</span>
             </a>
-            <h1 className="text-heading-2">Bem-vindo ao Freeze</h1>
+            <h1 className="text-heading-2">Crie sua conta</h1>
             <p className="text-sm text-slate-300">
-              Não tem uma conta?{' '}
+              Já tem uma conta?{' '}
               <Link
-                to="/signUp"
+                to="/login"
                 className="font-semibold text-sky-300 transition-colors hover:text-sky-200 hover:underline"
               >
-                Cadastre-se
+                Entrar
               </Link>
             </p>
           </div>
+
+          <FormField
+            name="name"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nome completo</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Seu nome completo"
+                    className="border-slate-800 bg-slate-900/60 text-slate-100 placeholder:text-slate-500 focus-visible:border-sky-400/60 focus-visible:ring-sky-400/30"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <FormField
             name="email"
@@ -99,7 +113,7 @@ function RouteComponent() {
           />
 
           <Button type="submit" className="w-full">
-            Entrar
+            Criar conta
           </Button>
 
           <div className="relative -my-2 flex h-5 items-center text-sm">
@@ -114,7 +128,6 @@ function RouteComponent() {
               variant="outline"
               type="button"
               className="border-slate-800 bg-slate-900/60 text-slate-100 hover:bg-slate-800/60 hover:text-slate-100"
-              disabled
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path
@@ -129,7 +142,6 @@ function RouteComponent() {
               variant="outline"
               type="button"
               className="border-slate-800 bg-slate-900/60 text-slate-100 hover:bg-slate-800/60 hover:text-slate-100"
-              disabled
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path

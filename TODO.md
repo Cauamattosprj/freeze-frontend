@@ -3,8 +3,8 @@
 - [x] Validar o datasource postgres
 - [x] Garantir que o saldo esteja sendo mostrado e calculado
 - [x] Continuar implementando o spring security https://medium.com/@felipeacelinoo/protegendo-sua-api-rest-com-spring-security-e-autenticando-usu%C3%A1rios-com-token-jwt-em-uma-aplica%C3%A7%C3%A3o-d70e5b0331f9
+- [ ] Implementar fluxo de login e cadastro no front
 - [ ] Implementar isolamento de dados por usuário
-- [ ] 
 - [ ] 
 - [ ] 
 - [ ] 

@@ -9,29 +9,10 @@ export const Route = createFileRoute('/')({ component: Home })
 
 
 function Home() {
-  if (useGetToken() === null) {
-    window.location.href = '/login'
-    console.log('Token is null, redirecting to login page.')
-  } else {
-    console.log('Token is valid, rendering the Freeze app.')
-  }
-
   return (
-      <main className="layout-shell">
-        <div className="layout-stack">
-          <FreezeHeader />
-          <FreezeDashboard />
-          <FreezePersonalFinanceRoot />
-          <div className="panel-grid">
-            <FreezeNotes />
-            <FreezeStudy />
-          </div>
-        </div>
-      </main>
+      Home
   )
 }
-
-
 
 export function FreezeNotes() {
   return (

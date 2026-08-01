@@ -7,6 +7,7 @@ export const Route = createFileRoute('/app')({
       console.log('Token is null, redirecting to login page.')
       throw redirect({ to: '/login' })
     }
+    console.log("Token is valid, rendering the Freeze app.", useGetToken())
   },
   component: RouteComponent,
 })

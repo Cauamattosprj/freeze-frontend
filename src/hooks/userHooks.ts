@@ -20,8 +20,9 @@ export function useLoginMutation() {
   return useMutation({ 
         mutationFn: (loginData: UserLoginDTO) => login(loginData), 
         onSuccess: (response) => {
+            console.log('Login successful, received token:', response.accessToken);
             qc.invalidateQueries({ queryKey: userKey })
-            accessToken = response;
+            accessToken = response.accessToken;
         },
         onError: (error) => console.error('Error making login:', error),
     })

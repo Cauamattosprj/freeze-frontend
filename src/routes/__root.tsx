@@ -16,7 +16,11 @@ function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Outlet />
+        <main className="layout-shell h-screen my-auto">
+          <div className="layout-stack ">
+            <Outlet />
+          </div>
+        </main>
         <TanStackRouterDevtools position="bottom-right" />
       </TooltipProvider>
     </QueryClientProvider>

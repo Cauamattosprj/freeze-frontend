@@ -3,7 +3,7 @@ import FreezeHeader from '#/components/freeze/FreezeHeader'
 import { FreezePersonalFinanceRoot } from '#/components/freeze/personal-finance/FreezePersonalFinanceRoot'
 import { useGetToken } from '#/hooks/userHooks'
 import { createFileRoute } from '@tanstack/react-router'
-import { FreezeNotes, FreezeStudy } from '..'
+import { FreezeNotes, FreezeStudy } from '../index'
 
 export const Route = createFileRoute('/app/')({
   component: RouteComponent,

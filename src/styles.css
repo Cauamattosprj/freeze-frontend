@@ -342,7 +342,7 @@ a {
   }
 
   .layout-stack {
-    @apply mx-auto flex max-w-xl flex-col gap-6;
+    @apply mx-auto flex h-full flex-col gap-6;
   }
 
   .surface-card {

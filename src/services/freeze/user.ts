@@ -19,9 +19,7 @@ async function baseFetch<T>(url: string, options?: RequestInit): Promise<T> {
     const text = await res.text()
     throw new Error(text || res.statusText)
   }
-  return res.headers.get('content-type')?.includes('application/json')
-    ? (await res.json() as T)
-    : (null as unknown as T)
+  return await res.json() as T
 }
 
 export function getUserById(id: string): Promise<any> {
@@ -30,8 +28,8 @@ export function getUserById(id: string): Promise<any> {
   })
 }
 
-export function login(data: UserLoginDTO): Promise<string> {
-  return baseFetch<string>(`${ENDPOINT}/login`, {
+export function login(data: UserLoginDTO): Promise<{accessToken: string}> {
+  return baseFetch<{accessToken: string}>(`${ENDPOINT}/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
