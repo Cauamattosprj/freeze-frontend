@@ -1,24 +1,17 @@
-import { useGetToken } from '#/hooks/userHooks'
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
+import { checkTokenValidity } from '#/services/freeze/auth'
 
 export const Route = createFileRoute('/app')({
-  beforeLoad: () => {
-    if (!useGetToken()) {
-      console.log('Token is null, redirecting to login page.')
+  beforeLoad: async () => {
+    const valid = await checkTokenValidity()
+    if (!valid) {
+      console.log('Token is invalid, redirecting to login page.')
       throw redirect({ to: '/login' })
     }
-    console.log("Token is valid, rendering the Freeze app.", useGetToken())
   },
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  // if (useGetToken() === null) {
-  //   window.location.href = '/login'
-  //   console.log('Token is null, redirecting to login page.')
-  // } else {
-  //   console.log('Token is valid, rendering the Freeze app.')
-  // }
-
   return <Outlet />
 }

@@ -1,4 +1,4 @@
-import { VITE_API_URL } from "#/lib/constants"
+import { apiFetch } from '#/services/httpClient'
 
 export type UserSignUpDTO = {
     fullName: string,
@@ -13,33 +13,24 @@ export type UserLoginDTO = {
 
 const ENDPOINT = 'users'
 
-async function baseFetch<T>(url: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(`${VITE_API_URL}${url}`, options)
-  if (!res.ok) {
-    const text = await res.text()
-    throw new Error(text || res.statusText)
-  }
-  return await res.json() as T
-}
-
 export function getUserById(id: string): Promise<any> {
-  return baseFetch<string>(`${ENDPOINT}/${id}`, {
+  return apiFetch<string>(`${ENDPOINT}/${id}`, {
     method: 'GET',
   })
 }
 
-export function login(data: UserLoginDTO): Promise<{accessToken: string}> {
-  return baseFetch<{accessToken: string}>(`${ENDPOINT}/login`, {
+export function login(data: UserLoginDTO): Promise<{ accessToken?: string }> {
+  return apiFetch<{ accessToken?: string }>(`${ENDPOINT}/login`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    public: true,
     body: JSON.stringify(data),
   })
 }
 
 export function signUp(data: UserSignUpDTO): Promise<string> {
-  return baseFetch<string>(`${ENDPOINT}/signUp`, {
+  return apiFetch<string>(`${ENDPOINT}/signUp`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    public: true,
     body: JSON.stringify(data),
   })
 }

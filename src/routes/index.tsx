@@ -1,8 +1,6 @@
 import { FreezeDashboard } from '#/components/freeze/FreezeDashboard'
 import FreezeHeader from '#/components/freeze/FreezeHeader'
 import { FreezePersonalFinanceRoot } from '#/components/freeze/personal-finance/FreezePersonalFinanceRoot'
-import { useGetToken } from '#/hooks/userHooks'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({ component: Home })

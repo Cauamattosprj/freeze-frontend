@@ -14,7 +14,7 @@ import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
 import { Separator } from '#/components/ui/separator'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useGetToken, useLoginMutation } from '#/hooks/userHooks'
+import { useLoginMutation } from '#/hooks/userHooks'
 
 export const Route = createFileRoute('/login')({
   component: RouteComponent,
@@ -29,12 +29,10 @@ function RouteComponent() {
   const form = useForm<LoginForm>()
   const { handleSubmit } = form
   const loginMutation = useLoginMutation()
-  const token = useGetToken()
 
   function onSubmit(values: LoginForm) {
     console.log(values)
     loginMutation.mutate(values)
-    console.log("Token do getToken:", token)
   }
 
   return (
