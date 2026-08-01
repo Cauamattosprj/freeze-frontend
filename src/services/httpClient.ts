@@ -13,7 +13,7 @@ export function setUnauthorizedHandler(handler: () => void) {
 
 async function requestRefresh(): Promise<boolean> {
   if (!refreshPromise) {
-    refreshPromise = fetch(`${VITE_API_URL}/auth/refresh`, {
+    refreshPromise = fetch(`${VITE_API_URL}auth/refresh`, {
       method: 'POST',
       credentials: 'include',
     })
