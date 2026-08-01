@@ -5,7 +5,7 @@ export type Balance = {
   initialAmount: number
 }
 
-const ENDPOINT = 'v1/balance'
+const ENDPOINT = 'balance'
 
 export function getBalance(): Promise<number> {
   return apiFetch<number>(ENDPOINT)

@@ -6,7 +6,7 @@ export type Deposit = {
   date: Date
 }
 
-const ENDPOINT = 'v1/deposits'
+const ENDPOINT = 'deposits'
 
 export function getDeposits(): Promise<Deposit[]> {
   return apiFetch<Deposit[]>(ENDPOINT)

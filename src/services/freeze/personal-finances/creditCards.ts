@@ -12,7 +12,7 @@ export type CreditCard = {
   dueDate: string
 }
 
-const ENDPOINT = 'v1/credit-cards'
+const ENDPOINT = 'credit-cards'
 
 export function getCreditCards(): Promise<CreditCard[]> {
   return apiFetch<CreditCard[]>(ENDPOINT)

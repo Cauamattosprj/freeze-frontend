@@ -11,7 +11,7 @@ export type Expense = {
   creditCardId?: string
 }
 
-const ENDPOINT = 'v1/expenses'
+const ENDPOINT = 'expenses'
 
 export function getExpenses(): Promise<Expense[]> {
   return apiFetch<Expense[]>(ENDPOINT)

@@ -9,7 +9,7 @@ export type Income = {
   category: string
 }
 
-const ENDPOINT = 'v1/incomes'
+const ENDPOINT = 'incomes'
 
 export function getIncomes(): Promise<Income[]> {
   return apiFetch<Income[]>(ENDPOINT)

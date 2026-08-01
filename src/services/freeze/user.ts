@@ -19,8 +19,8 @@ export function getUserById(id: string): Promise<any> {
   })
 }
 
-export function login(data: UserLoginDTO): Promise<{ accessToken?: string }> {
-  return apiFetch<{ accessToken?: string }>(`${ENDPOINT}/login`, {
+export function login(data: UserLoginDTO): Promise<void> {
+  return apiFetch<void>(`${ENDPOINT}/login`, {
     method: 'POST',
     public: true,
     body: JSON.stringify(data),

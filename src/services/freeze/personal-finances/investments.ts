@@ -38,7 +38,7 @@ export type Investment = {
   category: InvestmentCategory
 }
 
-const ENDPOINT = 'v1/investments'
+const ENDPOINT = 'investments'
 
 export function getInvestments(): Promise<Investment[]> {
   return apiFetch<Investment[]>(ENDPOINT)

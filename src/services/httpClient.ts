@@ -31,6 +31,7 @@ export async function apiFetch<T>(
   retried = false,
 ): Promise<T> {
   const { public: isPublic, ...request } = options
+  console.log("var:", import.meta.env.VITE_API_URL);
 
   const response = await fetch(`${VITE_API_URL}${path}`, {
     ...request,
@@ -40,6 +41,8 @@ export async function apiFetch<T>(
       ...request.headers,
     },
   })
+
+  console.log(`Request to ${path} returned status ${response.status}`, response)
 
   if (response.status === 401 && !isPublic && !retried) {
     const refreshed = await requestRefresh()
