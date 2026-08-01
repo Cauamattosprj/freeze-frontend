@@ -1,24 +1,22 @@
+import { FreezeDashboard } from '#/components/freeze/FreezeDashboard'
+import FreezeHeader from '#/components/freeze/FreezeHeader'
 import { FreezePersonalFinanceRoot } from '#/components/freeze/personal-finance/FreezePersonalFinanceRoot'
-import { Button } from '#/components/ui/button'
-import { Separator } from '#/components/ui/separator'
+import { useGetToken } from '#/hooks/userHooks'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import {
-  LucideArrowRight,
-  LucideCheck,
-  LucideCreditCard,
-  LucideDollarSign,
-  LucideMinus,
-  LucidePlus,
-} from 'lucide-react'
-import { useState } from 'react'
 
 export const Route = createFileRoute('/')({ component: Home })
-const queryClient = new QueryClient()
+
 
 function Home() {
+  if (useGetToken() === null) {
+    window.location.href = '/login'
+    console.log('Token is null, redirecting to login page.')
+  } else {
+    console.log('Token is valid, rendering the Freeze app.')
+  }
+
   return (
-    <QueryClientProvider client={queryClient}>
       <main className="layout-shell">
         <div className="layout-stack">
           <FreezeHeader />
@@ -30,32 +28,10 @@ function Home() {
           </div>
         </div>
       </main>
-    </QueryClientProvider>
   )
 }
 
-export default function FreezeHeader() {
-  return (
-    <section className="surface-card surface-card-soft">
-      <div className="w-full text-center">
-        <h1 className="text-xl font-semibold">Freeze</h1>
-      </div>
-    </section>
-  )
-}
 
-export function FreezeDashboard() {
-  return (
-    <section className="surface-card">
-      <div className="flex items-center justify-between gap-6">
-        <div>
-          <p className="text-label">Dashboard</p>
-          <h2 className="mt-3 text-heading-2">Your overview</h2>
-        </div>
-      </div>
-    </section>
-  )
-}
 
 export function FreezeNotes() {
   return (
