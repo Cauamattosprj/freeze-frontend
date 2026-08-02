@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import {
   getExpenses,
   getExpense,
@@ -8,6 +9,7 @@ import {
   type Expense,
   getExpensesByCreditCard,
 } from '#/services/freeze/personal-finances/expenses'
+import { getErrorMessage } from '#/lib/utils'
 
 const expenseListKey = ['expenses']
 const expenseKey = (id: string | undefined) => ['expense', id] as const
@@ -32,6 +34,11 @@ export function useCreateExpenseMutation() {
     onSuccess: async () => {
       await qc.invalidateQueries({ queryKey: [expenseListKey] })
       await qc.invalidateQueries({ queryKey: ['balance'] })
+      toast.success('Despesa criada com sucesso.')
+    },
+    onError: (error) => {
+      console.error('Error creating expense:', error)
+      toast.error(getErrorMessage(error, 'Não foi possível criar a despesa.'))
     },
   })
 }
@@ -42,10 +49,14 @@ export function useUpdateExpenseMutation() {
   return useMutation({
     mutationFn: (expense: Partial<Expense>) => updateExpense(expense),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: expenseListKey }),
+      qc.invalidateQueries({ queryKey: expenseListKey })
       qc.invalidateQueries({ queryKey: ['balance'] })
+      toast.success('Despesa atualizada com sucesso.')
     },
-    onError: (error) => console.error('Error updating expense:', error),
+    onError: (error) => {
+      console.error('Error updating expense:', error)
+      toast.error(getErrorMessage(error, 'Não foi possível atualizar a despesa.'))
+    },
   })
 }
 
@@ -54,6 +65,13 @@ export function useDeleteExpenseMutation() {
 
   return useMutation({
     mutationFn: deleteExpense,
-    onSuccess: () => qc.invalidateQueries({ queryKey: expenseListKey }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: expenseListKey })
+      toast.success('Despesa removida com sucesso.')
+    },
+    onError: (error) => {
+      console.error('Error deleting expense:', error)
+      toast.error(getErrorMessage(error, 'Não foi possível remover a despesa.'))
+    },
   })
 }
