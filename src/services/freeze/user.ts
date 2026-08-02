@@ -11,10 +11,18 @@ export type UserLoginDTO = {
     email: string
 }
 
+export type User = {
+    id: string
+    fullName: string
+    email: string
+    birthDate: string
+    createdAt: string
+}
+
 const ENDPOINT = 'users'
 
-export function getUserById(id: string): Promise<any> {
-  return apiFetch<string>(`${ENDPOINT}/${id}`, {
+export function getMe(): Promise<User> {
+  return apiFetch<User>(`${ENDPOINT}/me`, {
     method: 'GET',
   })
 }

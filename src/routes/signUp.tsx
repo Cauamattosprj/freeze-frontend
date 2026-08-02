@@ -14,23 +14,22 @@ import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
 import { Separator } from '#/components/ui/separator'
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { useSignUpMutation } from '#/hooks/userHooks'
+import type { UserSignUpDTO } from '#/services/freeze/user'
 
 export const Route = createFileRoute('/signUp')({
   component: RouteComponent,
 })
 
-type SignUpForm = {
-  name: string
-  email: string
-  password: string
-}
 
 function RouteComponent() {
-  const form = useForm<SignUpForm>()
+  const form = useForm<UserSignUpDTO>()
   const { handleSubmit } = form
+  const signUpMutation = useSignUpMutation()
 
-  function onSubmit(values: SignUpForm) {
+  function onSubmit(values: UserSignUpDTO) {
     console.log(values)
+    signUpMutation.mutate(values)
   }
 
   return (
@@ -57,7 +56,7 @@ function RouteComponent() {
           </div>
 
           <FormField
-            name="name"
+            name="fullName"
             control={form.control}
             render={({ field }) => (
               <FormItem>
