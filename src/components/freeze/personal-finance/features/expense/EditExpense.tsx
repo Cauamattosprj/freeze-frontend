@@ -13,6 +13,13 @@ import {
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '#/components/ui/select'
+import {
   Dialog,
   DialogTrigger,
   DialogContent,
@@ -22,6 +29,7 @@ import {
 } from '#/components/ui/dialog'
 import type { Expense } from '#/services/freeze/personal-finances/expenses'
 import { useUpdateExpenseMutation } from '#/hooks/expensesHooks'
+import { EXPENSE_STATUS_LABELS } from '#/utils/personalFinanceEnums'
 
 export default function EditExpense({
   children,
@@ -101,9 +109,20 @@ export default function EditExpense({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Status</FormLabel>
-                  <FormControl>
-                    <Input placeholder="paid / pending" {...field} />
-                  </FormControl>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione o status" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {Object.entries(EXPENSE_STATUS_LABELS).map(([value, label]) => (
+                        <SelectItem key={value} value={value}>
+                          {label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

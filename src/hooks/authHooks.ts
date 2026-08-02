@@ -14,6 +14,7 @@ export function useLogoutMutation() {
     },
     onError: (error) => {
       console.error('Error making logout:', error)
+      window.location.href = '/login'
       toast.error(getErrorMessage(error, 'Não foi possível sair. Tente novamente.'))
     },
   })

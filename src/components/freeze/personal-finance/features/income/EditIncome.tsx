@@ -13,6 +13,13 @@ import {
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '#/components/ui/select'
+import {
   Dialog,
   DialogTrigger,
   DialogContent,
@@ -26,6 +33,7 @@ import {
   useDeleteIncomeMutation,
   useUpdateIncomeMutation,
 } from '#/hooks/incomesHooks'
+import { INCOME_STATUS_LABELS } from '#/utils/personalFinanceEnums'
 
 export default function EditIncome({
   children,
@@ -112,9 +120,20 @@ export default function EditIncome({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Status</FormLabel>
-                  <FormControl>
-                    <Input placeholder="pending / received" {...field} />
-                  </FormControl>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione o status" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {Object.entries(INCOME_STATUS_LABELS).map(([value, label]) => (
+                        <SelectItem key={value} value={value}>
+                          {label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

@@ -26,7 +26,7 @@ function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <main className="layout-shell h-screen my-auto">
+        <main className="layout-shell">
           <div className="layout-stack ">
             <Outlet />
           </div>

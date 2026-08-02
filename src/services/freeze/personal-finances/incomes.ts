@@ -1,10 +1,11 @@
 import { apiFetch } from '#/services/httpClient'
+import type { IncomeStatusEnum } from '#/utils/personalFinanceEnums'
 
 export type Income = {
   id?: string
   label: string
   amount: number
-  status: string
+  status: IncomeStatusEnum
   dueDate: string
   category: string
 }

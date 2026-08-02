@@ -13,6 +13,13 @@ import {
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '#/components/ui/select'
+import {
   Dialog,
   DialogTrigger,
   DialogContent,
@@ -22,10 +29,13 @@ import {
 } from '#/components/ui/dialog'
 import type { Expense } from '#/services/freeze/personal-finances/expenses'
 import { useCreateExpenseMutation } from '#/hooks/expensesHooks'
+import { useGetCreditCardsQuery } from '#/hooks/creditCardsHooks'
+import { EXPENSE_STATUS_LABELS } from '#/utils/personalFinanceEnums'
 
 export default function CreateExpense() {
   const [open, setOpen] = React.useState(false)
   const expenseMutation = useCreateExpenseMutation()
+  const creditCardsQuery = useGetCreditCardsQuery()
   const form = useForm<Expense>()
   const { handleSubmit } = form
 
@@ -90,9 +100,20 @@ export default function CreateExpense() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Status</FormLabel>
-                  <FormControl>
-                    <Input placeholder="pending / paid" {...field} />
-                  </FormControl>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione o status" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {Object.entries(EXPENSE_STATUS_LABELS).map(([value, label]) => (
+                        <SelectItem key={value} value={value}>
+                          {label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
@@ -132,9 +153,26 @@ export default function CreateExpense() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Cartão de crédito</FormLabel>
-                  <FormControl>
-                    <Input placeholder="ID do cartão de crédito" {...field} />
-                  </FormControl>
+                  <Select
+                    onValueChange={(value) =>
+                      field.onChange(value === 'none' ? undefined : value)
+                    }
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione um cartão" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="none">Nenhum cartão</SelectItem>
+                      {creditCardsQuery.data?.map((card) => (
+                        <SelectItem key={card.id} value={card.id as string}>
+                          {card.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

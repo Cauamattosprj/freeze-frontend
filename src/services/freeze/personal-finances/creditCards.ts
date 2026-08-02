@@ -4,9 +4,6 @@ export type CreditCard = {
   id?: string
   label?: string
   holderName: string
-  number: string
-  expiry: string
-  cvv?: string
   limitAmount: number
   brand: string
   dueDate: string

@@ -94,48 +94,6 @@ export default function CreateCreditCard() {
             />
 
             <FormField
-              name="number"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Número</FormLabel>
-                  <FormControl>
-                    <Input placeholder="0000 0000 0000 0000" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              name="expiry"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Validade</FormLabel>
-                  <FormControl>
-                    <Input placeholder="MM/AA" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              name="cvv"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>CVV</FormLabel>
-                  <FormControl>
-                    <Input placeholder="123" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
               name="limit"
               control={form.control}
               render={({ field }) => (

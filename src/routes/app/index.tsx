@@ -9,19 +9,13 @@ export const Route = createFileRoute('/app/')({
 })
 
 function RouteComponent() {
-
-
   return (
-    <main className="layout-shell">
-      <div className="layout-stack">
-        <FreezeHeader />
-        <FreezeDashboard />
-        <FreezePersonalFinanceRoot />
-        <div className="panel-grid">
-          <FreezeNotes />
-          <FreezeStudy />
-        </div>
-      </div>
-    </main>
+    <>
+      <FreezeHeader />
+      <FreezeDashboard />
+      <FreezePersonalFinanceRoot />
+      <FreezeNotes />
+      <FreezeStudy />
+    </>
   )
 }
